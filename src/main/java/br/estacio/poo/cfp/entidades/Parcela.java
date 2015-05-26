@@ -16,8 +16,8 @@ public class Parcela {
 	private int id;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "conta_id")
-	private Conta conta;
+	@JoinColumn(name = "pagamento_id")
+	private Pagamento pagamento;
 	private int numero;
 	private Calendar vencimento;
 	private double valor;
@@ -25,21 +25,21 @@ public class Parcela {
 	
 	public Parcela(){}
 	
-	public Parcela(Conta conta, int numero, Calendar vencimento, double valor,
+	public Parcela(Pagamento pagamento, int numero, Calendar vencimento, double valor,
 			boolean pago) {
 		super();
-		this.conta = conta;
+		this.pagamento = pagamento;
 		this.numero = numero;
 		this.vencimento = vencimento;
 		this.valor = valor;
 		this.pago = pago;
 	}
 
-	public Conta getCodConta() {
-		return conta;
+	public Pagamento getPagamento() {
+		return pagamento;
 	}
-	public void setCodConta(Conta conta) {
-		this.conta = conta;
+	public void setPagamento(Pagamento pagamento) {
+		this.pagamento = pagamento;
 	}
 	public int getNumero() {
 		return numero;

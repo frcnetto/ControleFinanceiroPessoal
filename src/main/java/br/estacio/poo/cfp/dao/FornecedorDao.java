@@ -14,7 +14,7 @@ public class FornecedorDao {
     }
     
     public void cadastraFornecedor(Fornecedor novo){
-        conexao.persiste(novo);
+        conexao.persisteUm(novo);
     }
     
     public Fornecedor buscaPeloNome(String nome) {

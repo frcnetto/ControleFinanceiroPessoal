@@ -19,7 +19,7 @@ public class RecebimentoDao {
     }
     
     public void cadastraRecebimento(Recebimento novo){
-        conexao.persiste(novo);
+        conexao.persisteUm(novo);
     }
     
     public List<Recebimento> buscaPeloCliente(Cliente cliente) {

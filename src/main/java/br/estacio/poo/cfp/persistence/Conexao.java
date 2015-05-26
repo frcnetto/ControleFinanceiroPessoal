@@ -42,10 +42,14 @@ public class Conexao {
         factory.close();
     }
     
-    public void persiste(Object objeto){
+    public void persisteUm(Object objeto){
     	criaConexao();
     	manager.persist(objeto);
     	fechaConexao();
+    }
+    
+    public void persisteVarios(Object objeto){
+    	manager.persist(objeto);
     }
     
     public Query criaQuery(String query){

@@ -22,6 +22,8 @@ public class Conta{
     @Column(nullable = false)
     
     private int cod;
+    
+    @Column(nullable = true)
     private String descricao;
     private double valor;
     
@@ -32,10 +34,10 @@ public class Conta{
     private Calendar vencimento;
     
     private boolean parcela;
-    private int totParcela;
+    private int totParcela = 0;
     
-    @OneToMany(mappedBy = "conta")
-    private List<Parcela> parcelas;
+//    @OneToMany(mappedBy = "parcela")
+//    private List<Parcela> parcelas;
     private String situacao;
     
     public Conta(){
@@ -98,13 +100,13 @@ public class Conta{
         this.totParcela = totParcela;
     }
 
-    public List<Parcela> getNumParcela() {
-        return parcelas;
-    }
-
-    public void setNumParcela(List<Parcela> numParcela) {
-        this.parcelas = numParcela;
-    }
+//    public List<Parcela> getNumParcela() {
+//        return parcelas;
+//    }
+//
+//    public void setNumParcela(List<Parcela> numParcela) {
+//        this.parcelas = numParcela;
+//    }
 
     public String getSituacao() {
         return situacao;

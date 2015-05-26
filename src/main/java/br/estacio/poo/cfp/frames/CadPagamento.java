@@ -10,7 +10,9 @@ import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import br.estacio.poo.cfp.dao.FornecedorDao;
 import br.estacio.poo.cfp.dao.PagamentoDao;
+import br.estacio.poo.cfp.dao.ParcelaDao;
 import br.estacio.poo.cfp.entidades.Pagamento;
+import br.estacio.poo.cfp.entidades.Parcela;
 import br.estacio.poo.cfp.util.DateLabelFormatter;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.JMoneyField;
@@ -25,7 +27,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JCheckBox;
@@ -88,6 +92,7 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 	private TrataTable trataTable;
 	Locale locBrazil = new Locale("pt", "BR");
 	NumberFormat nf = NumberFormat.getInstance(locBrazil);
+	private List<Parcela> parcelas;
 
 	public CadPagamento() {
 		getContentPane().setLayout(null);
@@ -296,12 +301,16 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 		if(e.getSource() == btnCadastrar){
 			FornecedorDao fornecedorDao = new FornecedorDao();
 			Pagamento pagamento = new Pagamento();
+			PagamentoDao pagamentoDao = new PagamentoDao();
+			Parcela parcela = new Parcela();
+			ParcelaDao parcelaDao = new ParcelaDao();
+			parcelas = new ArrayList<Parcela>();
+			
 			pagamento.setFornecedor(fornecedorDao.buscaPeloNome(tfFornecedor.getText()));
 			pagamento.setDtPaamento((Calendar) dtVencimentoPicker.getModel().getValue());
 			try {
 				pagamento.setValor((double) nf.parse(valor.getText()));
 			} catch (ParseException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			pagamento.setParcela(ckbxParcelado.isSelected());
@@ -309,9 +318,32 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 			pagamento.setDesc(descricao.getText());
 			pagamento.setEmissao((Calendar) dtEmissaoPicker.getModel().getValue());
 			pagamento.setVencimento((Calendar) dtVencimentoPicker.getModel().getValue());
-			pagamento.setTotParcela((int) qtdParcelas.getValue());
-			pagamento.setParcelas(trataTable.carregaLista(tbPagarModel, tbPagoModel, pagamento));
-			PagamentoDao pagamentoDao = new PagamentoDao();
+			pagamento.setTotParcela(Integer.parseInt(qtdParcelas.getText()));
+			
+			for(int i = 0; i < tbPagarModel.getRowCount(); i++){
+				parcela = new Parcela();
+				parcela.setPagamento(pagamento);
+				parcela.setNumero(Integer.parseInt(tbPagarModel.getValueAt(i, 0).toString()));
+				parcela.setVencimento(trataTable.retornaCalendar(tbPagarModel.getValueAt(i, 1).toString()));
+				parcela.setValor(Float.parseFloat(tbPagarModel.getValueAt(i, 2).toString()));
+				parcela.setPago(false);
+				parcelas.add(parcela);				
+			}
+			
+			for(int i = 0; i < tbPagoModel.getRowCount(); i++){
+				parcela = new Parcela();
+				parcela.setPagamento(pagamento);
+				parcela.setNumero(Integer.parseInt(tbPagoModel.getValueAt(i, 0).toString()));
+				parcela.setVencimento(trataTable.retornaCalendar(tbPagoModel.getValueAt(i, 1).toString()));
+				parcela.setValor(Float.parseFloat(tbPagoModel.getValueAt(i, 2).toString()));
+				parcela.setPago(true);
+				parcelas.add(parcela);
+			}			
+			
+			pagamento.setParcelas(parcelas);
+			
+			parcelaDao.cadastraParcela(parcelas);
+			
 			pagamentoDao.cadastraPagamento(pagamento);
 		}else if(e.getSource() == btnAdicionar){
 			trataTable.validaAdicao(tbPagarModel, Integer.parseInt(qtdParcelas.getText()), (Calendar)dtVencimentoPicker.getModel().getValue(), valor.getText());

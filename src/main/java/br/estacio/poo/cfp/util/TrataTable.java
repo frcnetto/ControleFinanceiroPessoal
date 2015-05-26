@@ -1,22 +1,18 @@
 package br.estacio.poo.cfp.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-
-import br.estacio.poo.cfp.entidades.Conta;
-import br.estacio.poo.cfp.entidades.Parcela;
 
 public class TrataTable extends AbstractTableModel {
 	private static final long serialVersionUID = -3483215688827241245L;
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	private String valor = new String();
-
-	private List<Parcela> parcelas;
 
 	public TrataTable(){}
 	
@@ -50,31 +46,40 @@ public class TrataTable extends AbstractTableModel {
 	}
 	
 	public void validaTransferencia(DefaultTableModel destinoModel, DefaultTableModel origemModel){		
-		//Adiciona as linhas ca tabela de destino
 		for(int i = 0; i < origemModel.getRowCount(); i++){
 			String[] linha = {String.valueOf(origemModel.getValueAt(i, 0)), 
 							  String.valueOf(origemModel.getValueAt(i, 1)), 
 							  String.valueOf(origemModel.getValueAt(i, 2))};
 			destinoModel.addRow(linha);
 		}
-		//Remove as linha adicionadas anteriormente da tabela de origem
+		
 		for(int i = origemModel.getRowCount() - 1; i >= 0; i--){
 			origemModel.removeRow(i);
 		}
 	}
 	
-	public void validaTransferencia(DefaultTableModel destinoModel, DefaultTableModel origemModel, int[] linhas){		
-		//Adiciona as linhas na tabela de destino
+	public void validaTransferencia(DefaultTableModel destinoModel, DefaultTableModel origemModel, int[] linhas){				
 		for(int i = 0; i < linhas.length; i++){
 			String[] linha = {String.valueOf(origemModel.getValueAt(linhas[i], 0)), 
 							  String.valueOf(origemModel.getValueAt(linhas[i], 1)), 
 							  String.valueOf(origemModel.getValueAt(linhas[i], 2))};
 			destinoModel.addRow(linha);
 		}
-		//Remove as linhas adicionadas anteriormente da tabela de origem
+
 		for(int i = linhas.length - 1; i >= 0; i--){
 			origemModel.removeRow(linhas[i]);
 		}
+	}
+	
+	public Calendar retornaCalendar(String data){
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar cal  = Calendar.getInstance();
+		try {
+			cal.setTime(df.parse(data));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return cal;
 	}
 	
 	public void limpaTabela(DefaultTableModel modelo){
@@ -104,24 +109,24 @@ public class TrataTable extends AbstractTableModel {
 		return null;
 	}
 	
-	public List<Parcela> carregaLista(DefaultTableModel pagar, DefaultTableModel pago, Conta conta){
-		parcelas = null;
-		if(pagar.getRowCount() > 0)
-			for(int i = 0; i < pagar.getRowCount(); i++){
-				parcelas.add(i, new Parcela(conta, 
-										   (int)(pagar.getValueAt(i, 0)), 
-										   (Calendar)pagar.getValueAt(i, 1), 
-										   (double)pagar.getValueAt(i, 2), 
-										   false));
-			}
-		if(pago.getRowCount() > 0)
-			for(int i = 0; i < pago.getRowCount(); i++){
-				parcelas.add(i, new Parcela(conta, 
-										   (int)(pago.getValueAt(i, 0)), 
-										   (Calendar)pago.getValueAt(i, 1), 
-										   (double)pago.getValueAt(i, 2), 
-										   true));
-			}
-		return parcelas;		
-	}
+//	public List<Parcela> carregaLista(DefaultTableModel pagar, DefaultTableModel pago, Conta conta){
+//		parcelas = null;
+//		if(pagar.getRowCount() > 0)
+//			for(int i = 0; i < pagar.getRowCount(); i++){
+//				parcelas.add(i, new Parcela(conta, 
+//										   (int)(pagar.getValueAt(i, 0)), 
+//										   (Calendar)pagar.getValueAt(i, 1), 
+//										   (double)pagar.getValueAt(i, 2), 
+//										   false));
+//			}
+//		if(pago.getRowCount() > 0)
+//			for(int i = 0; i < pago.getRowCount(); i++){
+//				parcelas.add(i, new Parcela(conta, 
+//										   (int)(pago.getValueAt(i, 0)), 
+//										   (Calendar)pago.getValueAt(i, 1), 
+//										   (double)pago.getValueAt(i, 2), 
+//										   true));
+//			}
+//		return parcelas;		
+//	}
 }

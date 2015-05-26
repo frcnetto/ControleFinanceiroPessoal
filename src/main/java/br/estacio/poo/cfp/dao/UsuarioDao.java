@@ -14,7 +14,7 @@ public class UsuarioDao {
     }
     
     public void cadastraUsuario(Usuario usuario){
-        conexao.persiste(usuario);
+        conexao.persisteUm(usuario);
     }
 
     public boolean validaLoginSenha(String login, String senha) {

@@ -16,7 +16,7 @@ public class Pagamento extends Conta{
 	@JoinColumn(name = "fornecedor_id")
     private Fornecedor fornecedor;
     private Calendar dtPagamento;
-    @OneToMany(mappedBy = "conta")
+    @OneToMany(mappedBy = "pagamento")
     private List<Parcela> parcelas;
     
     public Pagamento(){

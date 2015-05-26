@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.entidades.Pagamento;
@@ -17,7 +18,8 @@ public class PagamentoDao {
     }
     
     public void cadastraPagamento(Pagamento novo){
-        conexao.persiste(novo);
+    	conexao.persisteUm(novo);
+        JOptionPane.showMessageDialog(null, "Pagamento cadastrado com sucesso!");        
     }
     
     public List<Pagamento> buscaPeloFornecedor(Fornecedor fornecedor) {

@@ -16,7 +16,7 @@ public class ClienteDao {
     }
     
     public void cadastraCliente(Cliente novo){
-        conexao.persiste(novo);
+        conexao.persisteUm(novo);
     }
     
     public List<Cliente> buscaPeloNome(String nome) {
