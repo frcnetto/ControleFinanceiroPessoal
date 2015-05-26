@@ -3,7 +3,7 @@ package br.estacio.poo.cfp.frames;
 import br.estacio.poo.cfp.persistence.Conexao;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.TrataPanel;
-import br.estacio.poo.cfp.util.Util;
+import br.estacio.poo.cfp.util.ManipulaThreads;
 import br.estacio.poo.cfp.dao.UsuarioDao;
 
 import java.awt.BorderLayout;
@@ -47,7 +47,7 @@ public class FrameLogin extends JFrame implements ActionListener, FocusListener{
     
     Imagens imgs = new Imagens();
     TrataPanel manipulaPainel = new TrataPanel();
-    Util util = new Util();
+    ManipulaThreads util = new ManipulaThreads();
     UsuarioDao usuarioDao = new UsuarioDao();
     Conexao conexao = new Conexao();
     

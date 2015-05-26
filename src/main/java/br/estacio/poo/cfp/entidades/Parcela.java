@@ -2,6 +2,7 @@ package br.estacio.poo.cfp.entidades;
 
 import java.util.Calendar;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -14,16 +15,26 @@ public class Parcela {
 	@GeneratedValue
 	private int id;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "conta_id")
 	private Conta conta;
 	private int numero;
 	private Calendar vencimento;
-	private float valor;
+	private double valor;
 	private boolean pago;
 	
 	public Parcela(){}
 	
+	public Parcela(Conta conta, int numero, Calendar vencimento, double valor,
+			boolean pago) {
+		super();
+		this.conta = conta;
+		this.numero = numero;
+		this.vencimento = vencimento;
+		this.valor = valor;
+		this.pago = pago;
+	}
+
 	public Conta getCodConta() {
 		return conta;
 	}
@@ -42,7 +53,7 @@ public class Parcela {
 	public void setVencimento(Calendar vencimento) {
 		this.vencimento = vencimento;
 	}
-	public float getValor() {
+	public double getValor() {
 		return valor;
 	}
 	public void setValor(float valor) {

@@ -2,6 +2,8 @@ package br.estacio.poo.cfp.frames;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -20,6 +22,7 @@ import br.estacio.poo.cfp.entidades.Cliente;
 import br.estacio.poo.cfp.old.FrameCadCliente;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.JMoneyField;
+import br.estacio.poo.cfp.util.ManipulaThreads;
 import br.estacio.poo.cfp.util.TrataComboBox;
 import br.estacio.poo.cfp.util.ValidaCampos;
 
@@ -34,7 +37,11 @@ import javax.swing.JButton;
 import javax.swing.text.MaskFormatter;
 import javax.swing.SwingConstants;
 
-public class CadCliente extends JInternalFrame implements ItemListener, KeyListener, ActionListener{
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import java.awt.Component;
+
+public class CadCliente extends JInternalFrame implements ItemListener, KeyListener, ActionListener, FocusListener{
 
 	private static final long serialVersionUID = 1L;
 
@@ -67,11 +74,13 @@ public class CadCliente extends JInternalFrame implements ItemListener, KeyListe
     private JTextArea observacoes;
     private JButton btnCancelar;
     private JButton btnCadastrar;
+    ManipulaThreads manipulaThreads;
 
 	public CadCliente() {
 		getContentPane().setLayout(null);
 		
 		imagens = new Imagens();
+		manipulaThreads = new ManipulaThreads();
 		
 		lblNome = new JLabel("Nome");
 		lblNome.setBounds(10, 11, 27, 14);
@@ -176,7 +185,13 @@ public class CadCliente extends JInternalFrame implements ItemListener, KeyListe
 		btnCadastrar.addActionListener(this);
 		getContentPane().add(btnCadastrar);
 		
-		
+		getContentPane().setFocusTraversalPolicy(
+				new FocusTraversalOnArray(
+						new Component[]{nome,     endereco,    cmbxUF,       cmbxCidade, 
+										telefone, celular,     servico,      vlrMensal, 
+										contrato, observacoes, btnCadastrar, btnCancelar}
+						)
+				);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Cadastro de Clientes");
 		setSize(546, 488);
@@ -268,5 +283,15 @@ public class CadCliente extends JInternalFrame implements ItemListener, KeyListe
 		        cmbxCidade.setEnabled(true);
 			}
 		}
+	}
+
+	@Override
+	public void focusGained(FocusEvent arg0) {
+		
+	}
+
+	@Override
+	public void focusLost(FocusEvent arg0) {
+		
 	}
 }

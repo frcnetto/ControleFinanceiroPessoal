@@ -268,26 +268,7 @@ public class CadRecebimento extends JInternalFrame implements KeyListener, Actio
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnAdicionar){
-			trataTable.validaAdicao(tbPagarModel, Integer.parseInt(qtdParcelas.getText()));
-//			if(tbPagarModel.getRowCount() == 0){
-//				for(int i = 0; i < Integer.parseInt(qtdParcelas.getText()); i++){
-//					String linha[] = {String.valueOf(i + 1), "", ""};
-//					tbPagarModel.addRow(linha);
-//				}				
-//			}else {
-//				if(tbPagarModel.getRowCount() < Integer.parseInt(qtdParcelas.getText())){
-//					for(int i = tbPagarModel.getRowCount(); i < Integer.parseInt(qtdParcelas.getText()); i++){						
-//						String linha[] = {String.valueOf(i + 1), "", ""};
-//						tbPagarModel.addRow(linha);
-//					}					
-//				} else{
-//					if(tbPagarModel.getRowCount() > Integer.parseInt(qtdParcelas.getText())){
-//						for(int i = tbPagarModel.getRowCount() - 1; i > (Integer.parseInt(qtdParcelas.getText()) - 1); i--){
-//							tbPagarModel.removeRow(i);
-//						}
-//					}
-//				}
-//			}
+			//trataTable.validaAdicao(tbPagarModel, Integer.parseInt(qtdParcelas.getText()), dtVencimentoModelo);
 		} else if(e.getSource() == moveDireitaSimples){
 			
 		} else if(e.getSource() == moveDireitaTotal){

@@ -11,6 +11,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 
 import br.estacio.poo.cfp.dao.CidadeDao;
+import br.estacio.poo.cfp.dao.ClienteDao;
 import br.estacio.poo.cfp.dao.EstadoDao;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.TrataComboBox;
@@ -23,6 +24,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 public class BuscCliente extends JInternalFrame implements ItemListener, KeyListener, ActionListener{
 
@@ -45,12 +47,16 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
     private JButton btnCancelar;
     private JButton btnOk;
     private JTable tbResult;
+    private DefaultTableModel tbResutModel;
     private JScrollPane scpResult;
+    private JButton btnConsultar;
+    private ClienteDao clienteDao;
 
 	public BuscCliente() {
 		getContentPane().setLayout(null);
 		
 		imagens = new Imagens();
+		clienteDao = new ClienteDao();
 		
 		lblNome = new JLabel("Nome");
 		lblNome.setBounds(10, 11, 27, 14);
@@ -102,13 +108,17 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 		scpResult.setBounds(10, 101, 510, 313);
 		getContentPane().add(scpResult);
 		
+		tbResutModel = new DefaultTableModel();
+		
 		tbResult = new JTable();
+		tbResult.setModel(tbResutModel);
 		scpResult.setViewportView(tbResult);
 		
-		JButton button = new JButton("Consultar");
-		button.setIcon(imagens.getImagens(7));
-		button.setBounds(419, 69, 101, 25);
-		getContentPane().add(button);
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.addActionListener(this);
+		btnConsultar.setIcon(imagens.getImagens(7));
+		btnConsultar.setBounds(419, 69, 101, 25);
+		getContentPane().add(btnConsultar);
 		
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -126,6 +136,8 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnOk){
 			
+		}else if(e.getSource() == btnConsultar){
+			clienteDao.buscaPeloNome(nome.getText());
 		}
 	}
 

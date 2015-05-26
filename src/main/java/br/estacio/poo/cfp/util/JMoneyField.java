@@ -38,7 +38,7 @@ public class JMoneyField extends JFormattedTextField {
     			}  
     		}
 		);  
-    }  
+    }
       
     private final class MoneyFieldFocusListener extends FocusAdapter{  
         public void focusGained(FocusEvent e) {  
