@@ -19,7 +19,6 @@ import br.estacio.poo.cfp.dao.CidadeDao;
 import br.estacio.poo.cfp.dao.ClienteDao;
 import br.estacio.poo.cfp.dao.EstadoDao;
 import br.estacio.poo.cfp.entidades.Cliente;
-import br.estacio.poo.cfp.old.FrameCadCliente;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.JMoneyField;
 import br.estacio.poo.cfp.util.ManipulaThreads;
@@ -132,7 +131,7 @@ public class CadCliente extends JInternalFrame implements ItemListener, KeyListe
 		try {
             mfTelefone = new MaskFormatter("(##) ####-####");
         } catch (ParseException ex) {
-            Logger.getLogger(FrameCadCliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CadCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 		
 		telefone = new JFormattedTextField(mfTelefone);

@@ -17,7 +17,6 @@ import br.estacio.poo.cfp.dao.CidadeDao;
 import br.estacio.poo.cfp.dao.EstadoDao;
 import br.estacio.poo.cfp.dao.FornecedorDao;
 import br.estacio.poo.cfp.entidades.Fornecedor;
-import br.estacio.poo.cfp.old.FrameCadCliente;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.JMoneyField;
 import br.estacio.poo.cfp.util.TrataComboBox;
@@ -121,7 +120,7 @@ public class CadFornecedor extends JInternalFrame implements ItemListener, Actio
 		try {
             mfTelefone = new MaskFormatter("(##) ####-####");
         } catch (ParseException ex) {
-            Logger.getLogger(FrameCadCliente.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CadCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 		
 		telefone = new JFormattedTextField(mfTelefone);

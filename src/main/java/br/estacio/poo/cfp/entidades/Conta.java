@@ -1,7 +1,6 @@
 package br.estacio.poo.cfp.entidades;
 
 import java.util.Calendar;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -10,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -27,24 +24,39 @@ public class Conta{
     private String descricao;
     private double valor;
     
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Calendar emissao;
-    
-    @Temporal(javax.persistence.TemporalType.DATE)
-    private Calendar vencimento;
-    
+    //@Temporal(javax.persistence.TemporalType.DATE)
+    private Calendar emissao;    
+   // @Temporal(javax.persistence.TemporalType.DATE)
+    private Calendar vencimento;    
     private boolean parcela;
     private int totParcela = 0;
-    
-//    @OneToMany(mappedBy = "parcela")
-//    private List<Parcela> parcelas;
     private String situacao;
     
     public Conta(){
-    
+    	super();
+		this.descricao = "";
+		this.valor = 0;
+		this.emissao = Calendar.getInstance();
+		this.vencimento = Calendar.getInstance();
+		this.parcela = false;
+		this.totParcela = 0;
+		this.situacao = "";
     }
 
-    public int getCod() {
+    public Conta(String descricao, double valor, Calendar emissao,
+			Calendar vencimento, boolean parcela, int totParcela,
+			String situacao) {
+		super();
+		this.descricao = descricao;
+		this.valor = valor;
+		this.emissao = emissao;
+		this.vencimento = vencimento;
+		this.parcela = parcela;
+		this.totParcela = totParcela;
+		this.situacao = situacao;
+	}
+
+	public int getCod() {
         return cod;
     }
 

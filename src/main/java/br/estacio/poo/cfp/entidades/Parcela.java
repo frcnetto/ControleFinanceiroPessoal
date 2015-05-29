@@ -23,7 +23,14 @@ public class Parcela {
 	private double valor;
 	private boolean pago;
 	
-	public Parcela(){}
+	public Parcela(){
+		super();
+		this.pagamento = new Pagamento();
+		this.numero = 0;
+		this.vencimento = Calendar.getInstance();
+		this.valor = 0;
+		this.pago = false;
+	}
 	
 	public Parcela(Pagamento pagamento, int numero, Calendar vencimento, double valor,
 			boolean pago) {

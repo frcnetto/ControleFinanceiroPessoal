@@ -12,17 +12,27 @@ import br.estacio.poo.cfp.persistence.Conexao;
 
 public class PagamentoDao {
     Conexao conexao = new Conexao();
+    ParcelaDao parcelaDao = new ParcelaDao();
     
     public PagamentoDao(){
     	
     }
     
     public void cadastraPagamento(Pagamento novo){
-    	conexao.persisteUm(novo);
+    	if(novo.isParcela()){
+    		conexao.criaConexao();
+    		conexao.persisteVarios(novo);
+    		parcelaDao.cadastraParcelas(novo.getParcelas());
+    		conexao.fechaConexao();
+    	} else{
+    		conexao.persisteUm(novo);
+    	}
+    	
         JOptionPane.showMessageDialog(null, "Pagamento cadastrado com sucesso!");        
     }
     
-    public List<Pagamento> buscaPeloFornecedor(Fornecedor fornecedor) {
+    @SuppressWarnings("unchecked")
+	public List<Pagamento> buscaPeloFornecedor(Fornecedor fornecedor) {
     	conexao.criaConexao();
     	try{
 	    	Query query = conexao.criaQuery("SELECT p FROM Pagamento p WHERE p.fornecedor_id = :fornecedor_cod");  	  

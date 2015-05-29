@@ -1,5 +1,6 @@
 package br.estacio.poo.cfp.entidades;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
@@ -16,8 +17,21 @@ public class Fornecedor extends Pessoa{
     private List<Pagamento> pagamentos;
     
     public Fornecedor(){
-        
+    	super();
+		this.tipo = "";
+		this.valorl = 0;
+		this.descricao = "";
+		this.pagamentos = new ArrayList<Pagamento>();
     }
+
+	public Fornecedor(String tipo, float valorl, String descricao,
+			List<Pagamento> pagamentos) {
+		super();
+		this.tipo = tipo;
+		this.valorl = valorl;
+		this.descricao = descricao;
+		this.pagamentos = pagamentos;
+	}
 
 	public String getTipo() {
         return tipo;

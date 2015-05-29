@@ -19,8 +19,7 @@ public class Pagamento extends Conta{
     @OneToMany(mappedBy = "pagamento")
     private List<Parcela> parcelas;
     
-    public Pagamento(){
-    
+    public Pagamento(){    	
     }
 
     public Fornecedor getFornecedor() {
@@ -31,11 +30,11 @@ public class Pagamento extends Conta{
         this.fornecedor = fornecedor;
     }
 
-    public Calendar getDtPaamento() {
+    public Calendar getDtPagamento() {
         return dtPagamento;
     }
 
-    public void setDtPaamento(Calendar dtPaamento) {
+    public void setDtPagamento(Calendar dtPaamento) {
         this.dtPagamento = dtPaamento;
     }
 

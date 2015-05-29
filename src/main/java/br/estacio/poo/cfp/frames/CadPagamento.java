@@ -10,7 +10,6 @@ import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import br.estacio.poo.cfp.dao.FornecedorDao;
 import br.estacio.poo.cfp.dao.PagamentoDao;
-import br.estacio.poo.cfp.dao.ParcelaDao;
 import br.estacio.poo.cfp.entidades.Pagamento;
 import br.estacio.poo.cfp.entidades.Parcela;
 import br.estacio.poo.cfp.util.DateLabelFormatter;
@@ -29,7 +28,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.JCheckBox;
@@ -92,7 +90,7 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 	private TrataTable trataTable;
 	Locale locBrazil = new Locale("pt", "BR");
 	NumberFormat nf = NumberFormat.getInstance(locBrazil);
-	private List<Parcela> parcelas;
+	private ArrayList<Parcela> parcelas;
 
 	public CadPagamento() {
 		getContentPane().setLayout(null);
@@ -302,12 +300,11 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 			FornecedorDao fornecedorDao = new FornecedorDao();
 			Pagamento pagamento = new Pagamento();
 			PagamentoDao pagamentoDao = new PagamentoDao();
-			Parcela parcela = new Parcela();
-			ParcelaDao parcelaDao = new ParcelaDao();
+			Parcela parcela;
 			parcelas = new ArrayList<Parcela>();
 			
 			pagamento.setFornecedor(fornecedorDao.buscaPeloNome(tfFornecedor.getText()));
-			pagamento.setDtPaamento((Calendar) dtVencimentoPicker.getModel().getValue());
+			pagamento.setDtPagamento(trataTable.retornaCalendar(dtPagamentoPicker.getJFormattedTextField().getText()));
 			try {
 				pagamento.setValor((double) nf.parse(valor.getText()));
 			} catch (ParseException e1) {
@@ -316,8 +313,8 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 			pagamento.setParcela(ckbxParcelado.isSelected());
 			pagamento.setSituacao(String.valueOf(situacao.getSelectedItem()));
 			pagamento.setDesc(descricao.getText());
-			pagamento.setEmissao((Calendar) dtEmissaoPicker.getModel().getValue());
-			pagamento.setVencimento((Calendar) dtVencimentoPicker.getModel().getValue());
+			pagamento.setEmissao(trataTable.retornaCalendar(dtEmissaoPicker.getJFormattedTextField().getText()));
+			pagamento.setVencimento(trataTable.retornaCalendar(dtVencimentoPicker.getJFormattedTextField().getText()));
 			pagamento.setTotParcela(Integer.parseInt(qtdParcelas.getText()));
 			
 			for(int i = 0; i < tbPagarModel.getRowCount(); i++){
@@ -327,9 +324,9 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 				parcela.setVencimento(trataTable.retornaCalendar(tbPagarModel.getValueAt(i, 1).toString()));
 				parcela.setValor(Float.parseFloat(tbPagarModel.getValueAt(i, 2).toString()));
 				parcela.setPago(false);
-				parcelas.add(parcela);				
+				parcelas.add(parcela);
 			}
-			
+
 			for(int i = 0; i < tbPagoModel.getRowCount(); i++){
 				parcela = new Parcela();
 				parcela.setPagamento(pagamento);
@@ -342,9 +339,8 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 			
 			pagamento.setParcelas(parcelas);
 			
-			parcelaDao.cadastraParcela(parcelas);
-			
 			pagamentoDao.cadastraPagamento(pagamento);
+			
 		}else if(e.getSource() == btnAdicionar){
 			trataTable.validaAdicao(tbPagarModel, Integer.parseInt(qtdParcelas.getText()), (Calendar)dtVencimentoPicker.getModel().getValue(), valor.getText());
 		} else if(e.getSource() == moveEsquerdaSimples){

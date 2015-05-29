@@ -26,10 +26,29 @@ public abstract class Pessoa{
     private String obs;
     
     public Pessoa(){
-    
+    	super();
+		this.nome = "";
+		this.endereco = "";
+		this.cidade = 0;
+		this.uf = 0;
+		this.telefone = "";
+		this.celular = "";
+		this.obs = "";
     }
 
-    public int getCod() {
+    public Pessoa(String nome, String endereco, int cidade, int uf,
+			String telefone, String celular, String obs) {
+		super();
+		this.nome = nome;
+		this.endereco = endereco;
+		this.cidade = cidade;
+		this.uf = uf;
+		this.telefone = telefone;
+		this.celular = celular;
+		this.obs = obs;
+	}
+
+	public int getCod() {
         return id;
     }
 
