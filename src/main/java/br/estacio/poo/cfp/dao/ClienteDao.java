@@ -81,6 +81,49 @@ public class ClienteDao {
     		conexao.fechaConexao();
     	}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void todosComNome(String nome, String estado, ClienteTableModel tabela) {
+		conexao.criaConexao();
+    	try{
+    		nome = "%" + nome + "%";
+    		EstadoDao estadoDao = new EstadoDao();
+    		int estadoId = estadoDao.carregaId(estado);
+	    	Query query = conexao.criaQuery("SELECT c FROM Cliente c WHERE c.nome LIKE :nome and c.uf = :uf");  	  
+	    	query.setParameter("nome", nome);
+	    	query.setParameter("uf", estadoId);
+			List<Cliente> clientes = query.getResultList();
+	    	conexao.fechaConexao();
+	    	for(Cliente c : clientes){
+	    		tabela.addRow(c);
+	    	}
+    	}catch(NoResultException e){
+    		conexao.fechaConexao();
+    	}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void todosComNome(String nome, String estado, String cidade, ClienteTableModel tabela) {
+		conexao.criaConexao();
+    	try{
+    		nome = "%" + nome + "%";
+    		EstadoDao estadoDao = new EstadoDao();
+    		int estadoId = estadoDao.carregaId(estado);
+    		CidadeDao cidadeDao = new CidadeDao();
+    		int cidadeId =cidadeDao.carregaId(cidade); 
+	    	Query query = conexao.criaQuery("SELECT c FROM Cliente c WHERE c.nome LIKE :nome AND c.uf = :uf AND c.cidade = :cidade");  	  
+	    	query.setParameter("nome", nome);
+	    	query.setParameter("uf", estadoId);
+	    	query.setParameter("cidade", cidadeId);
+			List<Cliente> clientes = query.getResultList();
+	    	conexao.fechaConexao();
+	    	for(Cliente c : clientes){
+	    		tabela.addRow(c);
+	    	}
+    	}catch(NoResultException e){
+    		conexao.fechaConexao();
+    	}
+	}
 
 	public Cliente buscaCliente(Cliente cliente) {
 		conexao.criaConexao();

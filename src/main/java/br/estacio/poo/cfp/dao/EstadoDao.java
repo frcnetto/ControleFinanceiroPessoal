@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+
 import br.estacio.poo.cfp.persistence.Conexao;
 
 public class EstadoDao {
@@ -13,7 +14,8 @@ Conexao conexao = new Conexao();
     	
     }
     
-    public List<String> carregaUf() {
+    @SuppressWarnings("unchecked")
+	public List<String> carregaUf() {
     	conexao.criaConexao();
     	try{
 	    	Query query = conexao.criaQuery("SELECT nome FROM Estado e");	    	

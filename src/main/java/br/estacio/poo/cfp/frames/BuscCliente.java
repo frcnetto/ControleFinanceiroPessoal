@@ -86,8 +86,7 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 		
 		cmbxCidade = new JComboBox<String>();
 		cmbxCidade.setBounds(166, 70, 146, 20);
-		cidadeModel = manipulaCombo.carregaCombo(cmbxCidade, cidadeDao.carregaCidade());
-		cmbxCidade.setModel(cidadeModel);
+		cmbxCidade.setEnabled(false);
 		getContentPane().add(cmbxCidade);
 		
 		cmbxUF = new JComboBox<String>();
@@ -163,7 +162,6 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 		
 		cmbxCidade = new JComboBox<String>();
 		cmbxCidade.setBounds(166, 70, 146, 20);
-		cidadeModel = manipulaCombo.carregaCombo(cmbxCidade, cidadeDao.carregaCidade());
 		cmbxCidade.setModel(cidadeModel);
 		getContentPane().add(cmbxCidade);
 		
@@ -221,10 +219,20 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 				framePai.setCliente(tbResultModel.getLinha(tbResult.getSelectedRow()));
 				framePai.setNome(framePai.getCliente().getNome());
 				this.dispose();
+			} else{
+				this.dispose();
 			}
 		} else if(e.getSource() == btnConsultar){
-			tbResultModel.limpaModel();
-			clienteDao.todosComNome(nome.getText(), tbResultModel);
+			if(cmbxUF.getSelectedItem().equals("------")){
+				tbResultModel.limpaModel();
+				clienteDao.todosComNome(nome.getText(), tbResultModel);
+			} else if(cmbxCidade.getSelectedItem().equals("------")){
+				tbResultModel.limpaModel();
+				clienteDao.todosComNome(nome.getText(), cmbxUF.getSelectedItem().toString(), tbResultModel);
+			} else{
+				tbResultModel.limpaModel();
+				clienteDao.todosComNome(nome.getText(), cmbxUF.getSelectedItem().toString(), cmbxCidade.getSelectedItem().toString(), tbResultModel);
+			}
 		}
 	}
 
@@ -249,6 +257,19 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		
+		if(e.getSource() == cmbxUF){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				cidadeModel = manipulaCombo.carregaCombo(
+						cmbxCidade, 
+						cidadeDao.carregaCidade(
+								estadoDao.carregaId(
+										cmbxUF.getSelectedItem().toString()
+										)
+						)
+				);
+		        cmbxCidade.setModel(cidadeModel);
+		        cmbxCidade.setEnabled(true);
+			}
+		}
 	}
 }

@@ -86,7 +86,7 @@ public class ClienteTableModel extends AbstractTableModel{
 	public void limpaModel(){
 		if(!linhas.isEmpty()){
 			linhas.clear();
-		    this.fireTableRowsDeleted(0, linhas.size() - 1);
+			fireTableRowsDeleted(0, 0);
 		}
 	}
 }

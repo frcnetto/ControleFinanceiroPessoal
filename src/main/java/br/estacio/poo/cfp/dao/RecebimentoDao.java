@@ -43,20 +43,15 @@ public class RecebimentoDao {
 		try{
 	    	conexao.criaConexao();
 	    	conexao.persisteVarios(recebimento);
-			for (int i = 0; i < parcelas.size(); i++) {
-	    		conexao.persisteVarios(parcelas.get(i));
-			}
+	    	if(recebimento.isParcela()){
+				for (int i = 0; i < parcelas.size(); i++) {
+		    		conexao.persisteVarios(parcelas.get(i));
+				}
+			} 
 			conexao.fechaConexao();    	
 	        JOptionPane.showMessageDialog(null, "Recebimento cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
     	} catch(PersistenceException e){
-//    		JOptionPane.showMessageDialog(
-//    				null, 
-//    				"Não foi possível cadastrar o pagamento devido a algum erro interno!\n"
-//    				+ "Detalhes:\n" 
-//					+ 
-    				e.printStackTrace();
-//    				"Erro", 
-//    				JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
     	}
 	}
 }

@@ -12,6 +12,7 @@ public class CidadeDao {
 	
 	public CidadeDao(){}
 	
+	@SuppressWarnings("unchecked")
 	public List<String> carregaCidade() {
     	conexao.criaConexao();
     	try{
@@ -25,6 +26,7 @@ public class CidadeDao {
     	}
     }
 	
+	@SuppressWarnings("unchecked")
 	public List<String> carregaCidade(int id) {
     	conexao.criaConexao();
     	if(id >= 0){

@@ -163,8 +163,7 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 		
 		cmbxCidade = new JComboBox<String>();
 		cmbxCidade.setBounds(166, 70, 146, 20);
-		cidadeModel = manipulaCombo.carregaCombo(cmbxCidade, cidadeDao.carregaCidade());
-		cmbxCidade.setModel(cidadeModel);
+		cmbxCidade.setEnabled(false);
 		getContentPane().add(cmbxCidade);
 		
 		cmbxUF = new JComboBox<String>();
@@ -221,10 +220,21 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 				framePai.setFornecedor(tbResultModel.getLinha(tbResult.getSelectedRow()));
 				framePai.setNome(framePai.getFornecedor().getNome());
 				this.dispose();
+			} else{
+				this.dispose();
 			}
 		} else if(e.getSource() == btnConsultar){
-			tbResultModel.limpaModel();
-			fornecedorDao.todosComNome(nome.getText(), tbResultModel);
+			if(cmbxUF.getSelectedItem().equals("------")){
+				tbResultModel.limpaModel();
+				fornecedorDao.todosComNome(nome.getText(), tbResultModel);
+				tbResultModel.limpaModel();
+			} else if(cmbxCidade.getSelectedItem().equals("------")){
+				tbResultModel.limpaModel();
+				fornecedorDao.todosComNome(nome.getText(), cmbxUF.getSelectedItem().toString(), tbResultModel);
+			} else{
+				tbResultModel.limpaModel();
+				fornecedorDao.todosComNome(nome.getText(), cmbxUF.getSelectedItem().toString(), cmbxCidade.getSelectedItem().toString(), tbResultModel);
+			}
 		}
 	}
 
@@ -249,6 +259,19 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		
+		if(e.getSource() == cmbxUF){
+			if(e.getStateChange() == ItemEvent.SELECTED){
+				cidadeModel = manipulaCombo.carregaCombo(
+						cmbxCidade, 
+						cidadeDao.carregaCidade(
+								estadoDao.carregaId(
+										cmbxUF.getSelectedItem().toString()
+										)
+						)
+				);
+		        cmbxCidade.setModel(cidadeModel);
+		        cmbxCidade.setEnabled(true);
+			}
+		}
 	}
 }

@@ -347,24 +347,27 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 										pagamento.setVencimento(trataTable.retornaCalendar(dtVencimentoPicker.getJFormattedTextField().getText()));
 										pagamento.setTotParcela(Integer.parseInt(qtdParcelas.getText()));
 										
-										for(int i = 0; i < tbPagarModel.getRowCount(); i++){
-											parcela = new Parcela();
-											parcela.setConta(pagamento);
-											parcela.setNumero(Integer.parseInt(tbPagarModel.getValueAt(i, 0).toString()));
-											parcela.setVencimento(trataTable.retornaCalendar(tbPagarModel.getValueAt(i, 1).toString()));
-											parcela.setValor(Float.parseFloat(tbPagarModel.getValueAt(i, 2).toString()));
-											parcela.setPago(false);
-											parcelas.add(parcela);
-										}
-
-										for(int i = 0; i < tbPagoModel.getRowCount(); i++){
-											parcela = new Parcela();
-											parcela.setConta(pagamento);
-											parcela.setNumero(Integer.parseInt(tbPagoModel.getValueAt(i, 0).toString()));
-											parcela.setVencimento(trataTable.retornaCalendar(tbPagoModel.getValueAt(i, 1).toString()));
-											parcela.setValor(Float.parseFloat(tbPagoModel.getValueAt(i, 2).toString()));
-											parcela.setPago(true);
-											parcelas.add(parcela);
+										parcelas.clear();
+										if(ckbxParcelado.isSelected()){
+											for(int i = 0; i < tbPagarModel.getRowCount(); i++){
+												parcela = new Parcela();
+												parcela.setConta(pagamento);
+												parcela.setNumero(Integer.parseInt(tbPagarModel.getValueAt(i, 0).toString()));
+												parcela.setVencimento(trataTable.retornaCalendar(tbPagarModel.getValueAt(i, 1).toString()));
+												parcela.setValor(Float.parseFloat(tbPagarModel.getValueAt(i, 2).toString()));
+												parcela.setPago(false);
+												parcelas.add(parcela);
+											}
+	
+											for(int i = 0; i < tbPagoModel.getRowCount(); i++){
+												parcela = new Parcela();
+												parcela.setConta(pagamento);
+												parcela.setNumero(Integer.parseInt(tbPagoModel.getValueAt(i, 0).toString()));
+												parcela.setVencimento(trataTable.retornaCalendar(tbPagoModel.getValueAt(i, 1).toString()));
+												parcela.setValor(Float.parseFloat(tbPagoModel.getValueAt(i, 2).toString()));
+												parcela.setPago(true);
+												parcelas.add(parcela);
+											}
 										}
 										
 										pagamentoDao.cadastraPagamento(pagamento, parcelas);
@@ -413,9 +416,21 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 			if(!qtdParcelas.isEnabled() && !btnAdicionar.isEnabled()){
 				qtdParcelas.setEnabled(true);
 				btnAdicionar.setEnabled(true);
+				tbPagar.setEnabled(true);
+				tbPago.setEnabled(true);
+				btnMoveDireitaSimples.setEnabled(true);
+				btnMoveDireitaTotal.setEnabled(true);
+				btnMoveEsquerdaSimples.setEnabled(true);
+				btnMoveEsquerdaTotal.setEnabled(true);
 			} else{
 				qtdParcelas.setEnabled(false);
 				btnAdicionar.setEnabled(false);
+				tbPagar.setEnabled(false);
+				tbPago.setEnabled(false);
+				btnMoveDireitaSimples.setEnabled(false);
+				btnMoveDireitaTotal.setEnabled(false);
+				btnMoveEsquerdaSimples.setEnabled(false);
+				btnMoveEsquerdaTotal.setEnabled(false);
 			}
 		}
 	}

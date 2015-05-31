@@ -5,8 +5,10 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import br.estacio.poo.cfp.entidades.Cliente;
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.persistence.Conexao;
+import br.estacio.poo.cfp.util.ClienteTableModel;
 import br.estacio.poo.cfp.util.FornecedorTableModel;
 
 public class FornecedorDao {
@@ -32,6 +34,49 @@ public class FornecedorDao {
     		conexao.fechaConexao();
     		e.printStackTrace();
     		return null;
+    	}
+	}
+    
+    @SuppressWarnings("unchecked")
+	public void todosComNome(String nome, String estado, FornecedorTableModel tabela) {
+		conexao.criaConexao();
+    	try{
+    		nome = "%" + nome + "%";
+    		EstadoDao estadoDao = new EstadoDao();
+    		int estadoId = estadoDao.carregaId(estado);
+	    	Query query = conexao.criaQuery("SELECT f FROM Fornecedor f WHERE f.nome LIKE :nome and f.uf = :uf");  	  
+	    	query.setParameter("nome", nome);
+	    	query.setParameter("uf", estadoId);
+			List<Fornecedor> fornecedores = query.getResultList();
+	    	conexao.fechaConexao();
+	    	for(Fornecedor f : fornecedores){
+	    		tabela.addRow(f);
+	    	}
+    	}catch(NoResultException e){
+    		conexao.fechaConexao();
+    	}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void todosComNome(String nome, String estado, String cidade, FornecedorTableModel tabela) {
+		conexao.criaConexao();
+    	try{
+    		nome = "%" + nome + "%";
+    		EstadoDao estadoDao = new EstadoDao();
+    		int estadoId = estadoDao.carregaId(estado);
+    		CidadeDao cidadeDao = new CidadeDao();
+    		int cidadeId =cidadeDao.carregaId(cidade); 
+	    	Query query = conexao.criaQuery("SELECT f FROM Fornecedor f WHERE f.nome LIKE :nome AND f.uf = :uf AND f.cidade = :cidade");  	  
+	    	query.setParameter("nome", nome);
+	    	query.setParameter("uf", estadoId);
+	    	query.setParameter("cidade", cidadeId);
+			List<Fornecedor> fornecedores = query.getResultList();
+	    	conexao.fechaConexao();
+	    	for(Fornecedor f : fornecedores){
+	    		tabela.addRow(f);
+	    	}
+    	}catch(NoResultException e){
+    		conexao.fechaConexao();
     	}
 	}
     
