@@ -3,11 +3,13 @@ package br.estacio.poo.cfp.dao;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.entidades.Pagamento;
+import br.estacio.poo.cfp.entidades.Parcela;
 import br.estacio.poo.cfp.persistence.Conexao;
 
 public class PagamentoDao {
@@ -18,17 +20,22 @@ public class PagamentoDao {
     	
     }
     
-    public void cadastraPagamento(Pagamento novo){
-    	if(novo.isParcela()){
-    		conexao.criaConexao();
-    		conexao.persisteVarios(novo);
-    		parcelaDao.cadastraParcelas(novo.getParcelas());
-    		conexao.fechaConexao();
-    	} else{
-    		conexao.persisteUm(novo);
+    public void cadastraPagamento(Pagamento pagamento, List<Parcela> parcelas){
+    	try{
+	    	conexao.criaConexao();	
+	    	conexao.persisteVarios(pagamento);
+			for (int i = 0; i < parcelas.size(); i++) {
+	    		conexao.persisteVarios(parcelas.get(i));
+			}
+			conexao.fechaConexao();    	
+	        JOptionPane.showMessageDialog(null, "Pagamento cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+    	} catch(PersistenceException e){
+    		JOptionPane.showMessageDialog(
+    				null, 
+    				"Não foi possível cadastrar o pagamento devido a algum erro interno!/n/nDetalhes:/n" + e.getMessage(), 
+    				"Erro", 
+    				JOptionPane.ERROR_MESSAGE);
     	}
-    	
-        JOptionPane.showMessageDialog(null, "Pagamento cadastrado com sucesso!");        
     }
     
     @SuppressWarnings("unchecked")

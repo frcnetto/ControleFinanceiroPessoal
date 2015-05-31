@@ -2,7 +2,6 @@ package br.estacio.poo.cfp.entidades;
 
 import java.util.Calendar;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -15,7 +14,7 @@ public class Parcela {
 	@GeneratedValue
 	private int id;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "pagamento_id")
 	private Pagamento pagamento;
 	private int numero;
@@ -24,7 +23,6 @@ public class Parcela {
 	private boolean pago;
 	
 	public Parcela(){
-		super();
 		this.pagamento = new Pagamento();
 		this.numero = 0;
 		this.vencimento = Calendar.getInstance();
@@ -32,9 +30,7 @@ public class Parcela {
 		this.pago = false;
 	}
 	
-	public Parcela(Pagamento pagamento, int numero, Calendar vencimento, double valor,
-			boolean pago) {
-		super();
+	public Parcela(Pagamento pagamento, int numero, Calendar vencimento, double valor, boolean pago) {
 		this.pagamento = pagamento;
 		this.numero = numero;
 		this.vencimento = vencimento;

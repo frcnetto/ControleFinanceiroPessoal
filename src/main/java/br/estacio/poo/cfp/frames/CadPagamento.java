@@ -31,7 +31,9 @@ import java.util.Calendar;
 import java.util.Locale;
 
 import javax.swing.JCheckBox;
+import javax.swing.JDesktopPane;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
@@ -61,15 +63,15 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
     private DefaultTableModel tbPagarModel;
     private JComboBox<String> situacao;
     private JTable tbPago;
-    private JButton moveDireitaSimples;
-    private JButton moveDireitaTotal;
+    private JButton btnMoveDireitaSimples;
+    private JButton btnMoveDireitaTotal;
     private Imagens imagens;
-    private JButton moveEsquerdaTotal;
-    private JButton moveEsquerdaSimples;
+    private JButton btnMoveEsquerdaTotal;
+    private JButton btnMoveEsquerdaSimples;
     private JButton btnCadastrar;
     private JButton btnCancelar;
     private JLabel lblFornecedor;
-    private JButton procurar;
+    private JButton btnProcurar;
     private JLabel lblDataDoPagamento;
     private JLabel lblValor;
     private JLabel lblQuantidadeDeParcelas;
@@ -92,7 +94,7 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 	NumberFormat nf = NumberFormat.getInstance(locBrazil);
 	private ArrayList<Parcela> parcelas;
 
-	public CadPagamento() {
+	public CadPagamento(final JDesktopPane dsktPane) {
 		getContentPane().setLayout(null);
 		
 		valida = new ValidaCampos();
@@ -104,18 +106,19 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 		lblFornecedor.setBounds(10, 11, 55, 14);
 		getContentPane().add(lblFornecedor);
 		tfFornecedor = new JTextField();
+		tfFornecedor.setEditable(false);
 		tfFornecedor.setBounds(10, 26, 470, 20);
 		getContentPane().add(tfFornecedor);
 		tfFornecedor.setColumns(10);
 		
-		procurar = new JButton();
-		procurar.setIcon(imagens.getImagens(7));
-		procurar.addActionListener(new ActionListener() {
+		btnProcurar = new JButton();
+		btnProcurar.setIcon(imagens.getImagens(7));
+		btnProcurar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		procurar.setBounds(490, 26, 49, 20);
-		getContentPane().add(procurar);
+		btnProcurar.setBounds(490, 26, 49, 20);
+		getContentPane().add(btnProcurar);
 		
 		lblDataDoPagamento = new JLabel("Data do Pagamento");
 		lblDataDoPagamento.setBounds(10, 50, 95, 14);
@@ -199,29 +202,29 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 		lblPago.setBounds(314, 262, 24, 14);
 		getContentPane().add(lblPago);
 		
-		moveDireitaSimples = new JButton();
-		moveDireitaSimples.addActionListener(this);
-		moveDireitaSimples.setIcon(imagens.getImagens(13));
-		moveDireitaSimples.setBounds(248, 304, 56, 25);
-		getContentPane().add(moveDireitaSimples);
+		btnMoveDireitaSimples = new JButton();
+		btnMoveDireitaSimples.addActionListener(this);
+		btnMoveDireitaSimples.setIcon(imagens.getImagens(13));
+		btnMoveDireitaSimples.setBounds(248, 304, 56, 25);
+		getContentPane().add(btnMoveDireitaSimples);
 		
-		moveDireitaTotal = new JButton();
-		moveDireitaTotal.addActionListener(this);
-		moveDireitaTotal.setIcon(imagens.getImagens(14));
-		moveDireitaTotal.setBounds(248, 335, 56, 25);
-		getContentPane().add(moveDireitaTotal);
+		btnMoveDireitaTotal = new JButton();
+		btnMoveDireitaTotal.addActionListener(this);
+		btnMoveDireitaTotal.setIcon(imagens.getImagens(14));
+		btnMoveDireitaTotal.setBounds(248, 335, 56, 25);
+		getContentPane().add(btnMoveDireitaTotal);
 		
-		moveEsquerdaSimples = new JButton();
-		moveEsquerdaSimples.addActionListener(this);
-		moveEsquerdaSimples.setIcon(imagens.getImagens(15));
-		moveEsquerdaSimples.setBounds(248, 366, 56, 25);
-		getContentPane().add(moveEsquerdaSimples);
+		btnMoveEsquerdaSimples = new JButton();
+		btnMoveEsquerdaSimples.addActionListener(this);
+		btnMoveEsquerdaSimples.setIcon(imagens.getImagens(15));
+		btnMoveEsquerdaSimples.setBounds(248, 366, 56, 25);
+		getContentPane().add(btnMoveEsquerdaSimples);
 		
-		moveEsquerdaTotal = new JButton();
-		moveEsquerdaTotal.addActionListener(this);
-		moveEsquerdaTotal.setIcon(imagens.getImagens(16));
-		moveEsquerdaTotal.setBounds(248, 397, 56, 25);
-		getContentPane().add(moveEsquerdaTotal);
+		btnMoveEsquerdaTotal = new JButton();
+		btnMoveEsquerdaTotal.addActionListener(this);
+		btnMoveEsquerdaTotal.setIcon(imagens.getImagens(16));
+		btnMoveEsquerdaTotal.setBounds(248, 397, 56, 25);
+		getContentPane().add(btnMoveEsquerdaTotal);
 		
 		btnCancelar = new JButton("Cancelar");
 		btnCancelar.setIcon(imagens.getImagens(1));
@@ -295,62 +298,89 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == btnCadastrar){
-			FornecedorDao fornecedorDao = new FornecedorDao();
-			Pagamento pagamento = new Pagamento();
-			PagamentoDao pagamentoDao = new PagamentoDao();
-			Parcela parcela;
-			parcelas = new ArrayList<Parcela>();
-			
-			pagamento.setFornecedor(fornecedorDao.buscaPeloNome(tfFornecedor.getText()));
-			pagamento.setDtPagamento(trataTable.retornaCalendar(dtPagamentoPicker.getJFormattedTextField().getText()));
-			try {
-				pagamento.setValor((double) nf.parse(valor.getText()));
-			} catch (ParseException e1) {
-				e1.printStackTrace();
-			}
-			pagamento.setParcela(ckbxParcelado.isSelected());
-			pagamento.setSituacao(String.valueOf(situacao.getSelectedItem()));
-			pagamento.setDesc(descricao.getText());
-			pagamento.setEmissao(trataTable.retornaCalendar(dtEmissaoPicker.getJFormattedTextField().getText()));
-			pagamento.setVencimento(trataTable.retornaCalendar(dtVencimentoPicker.getJFormattedTextField().getText()));
-			pagamento.setTotParcela(Integer.parseInt(qtdParcelas.getText()));
-			
-			for(int i = 0; i < tbPagarModel.getRowCount(); i++){
-				parcela = new Parcela();
-				parcela.setPagamento(pagamento);
-				parcela.setNumero(Integer.parseInt(tbPagarModel.getValueAt(i, 0).toString()));
-				parcela.setVencimento(trataTable.retornaCalendar(tbPagarModel.getValueAt(i, 1).toString()));
-				parcela.setValor(Float.parseFloat(tbPagarModel.getValueAt(i, 2).toString()));
-				parcela.setPago(false);
-				parcelas.add(parcela);
-			}
+	public void actionPerformed(ActionEvent e) {		
+		if(e.getSource() == btnCadastrar){	
+			if(!tfFornecedor.getText().isEmpty()){
+				if(!dtPagamentoPicker.getJFormattedTextField().getText().isEmpty()){
+					if(!valor.getText().equals("0,00")){
+						if(!dtEmissaoPicker.getJFormattedTextField().getText().isEmpty()){
+							if(!dtVencimentoPicker.getJFormattedTextField().getText().isEmpty()){
+								if(!(ckbxParcelado.isSelected() && (qtdParcelas.getText().isEmpty() || qtdParcelas.getText().equals("0")))){
+									if(!(ckbxParcelado.isSelected() && tbPagar.getRowCount() == 0 && tbPago.getRowCount() == 0)){
+										FornecedorDao fornecedorDao = new FornecedorDao();
+										Pagamento pagamento = new Pagamento();
+										PagamentoDao pagamentoDao = new PagamentoDao();
+										Parcela parcela;
+										parcelas = new ArrayList<Parcela>();
+										
+										pagamento.setFornecedor(fornecedorDao.primeiroComNome(tfFornecedor.getText()));
+										pagamento.setDtPagamento(trataTable.retornaCalendar(dtPagamentoPicker.getJFormattedTextField().getText()));
+										try {
+											pagamento.setValor((double) nf.parse(valor.getText()));
+										} catch (ParseException e1) {
+											e1.printStackTrace();
+										}
+										pagamento.setParcela(ckbxParcelado.isSelected());
+										pagamento.setSituacao(String.valueOf(situacao.getSelectedItem()));
+										pagamento.setDesc(descricao.getText());
+										pagamento.setEmissao(trataTable.retornaCalendar(dtEmissaoPicker.getJFormattedTextField().getText()));
+										pagamento.setVencimento(trataTable.retornaCalendar(dtVencimentoPicker.getJFormattedTextField().getText()));
+										pagamento.setTotParcela(Integer.parseInt(qtdParcelas.getText()));
+										
+										for(int i = 0; i < tbPagarModel.getRowCount(); i++){
+											parcela = new Parcela();
+											parcela.setPagamento(pagamento);
+											parcela.setNumero(Integer.parseInt(tbPagarModel.getValueAt(i, 0).toString()));
+											parcela.setVencimento(trataTable.retornaCalendar(tbPagarModel.getValueAt(i, 1).toString()));
+											parcela.setValor(Float.parseFloat(tbPagarModel.getValueAt(i, 2).toString()));
+											parcela.setPago(false);
+											parcelas.add(parcela);
+										}
 
-			for(int i = 0; i < tbPagoModel.getRowCount(); i++){
-				parcela = new Parcela();
-				parcela.setPagamento(pagamento);
-				parcela.setNumero(Integer.parseInt(tbPagoModel.getValueAt(i, 0).toString()));
-				parcela.setVencimento(trataTable.retornaCalendar(tbPagoModel.getValueAt(i, 1).toString()));
-				parcela.setValor(Float.parseFloat(tbPagoModel.getValueAt(i, 2).toString()));
-				parcela.setPago(true);
-				parcelas.add(parcela);
+										for(int i = 0; i < tbPagoModel.getRowCount(); i++){
+											parcela = new Parcela();
+											parcela.setPagamento(pagamento);
+											parcela.setNumero(Integer.parseInt(tbPagoModel.getValueAt(i, 0).toString()));
+											parcela.setVencimento(trataTable.retornaCalendar(tbPagoModel.getValueAt(i, 1).toString()));
+											parcela.setValor(Float.parseFloat(tbPagoModel.getValueAt(i, 2).toString()));
+											parcela.setPago(true);
+											parcelas.add(parcela);
+										}
+										
+										pagamentoDao.cadastraPagamento(pagamento, parcelas);
+									} else{
+										JOptionPane.showMessageDialog(null, "Voce não adicionou nenhuma parcela!", "Erro!", JOptionPane.ERROR_MESSAGE);
+									}
+								} else{									
+									JOptionPane.showMessageDialog(null, "Campo Quantidade de Parcelas é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
+								}
+							} else{
+								JOptionPane.showMessageDialog(null, "Campo Data de Vencimento é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
+							}
+						} else{
+							JOptionPane.showMessageDialog(null, "Campo Data de Emissão é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
+						}
+					} else{
+						JOptionPane.showMessageDialog(null, "Campo Valor é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
+					}
+				} else{
+					JOptionPane.showMessageDialog(null, "Campo Data do Pagamento é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
+				}
+			} else{
+				JOptionPane.showMessageDialog(null, "Campo fornecedor é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
 			}			
-			
-			pagamento.setParcelas(parcelas);
-			
-			pagamentoDao.cadastraPagamento(pagamento);
-			
 		}else if(e.getSource() == btnAdicionar){
 			trataTable.validaAdicao(tbPagarModel, Integer.parseInt(qtdParcelas.getText()), (Calendar)dtVencimentoPicker.getModel().getValue(), valor.getText());
-		} else if(e.getSource() == moveEsquerdaSimples){
+		} else if(e.getSource() == btnMoveEsquerdaSimples){
 			trataTable.validaTransferencia(tbPagarModel, tbPagoModel, tbPago.getSelectedRows());
-		} else if(e.getSource() == moveEsquerdaTotal){
+		} else if(e.getSource() == btnMoveEsquerdaTotal){
 			trataTable.validaTransferencia(tbPagarModel, tbPagoModel);
-		} else if(e.getSource() == moveDireitaSimples){
+		} else if(e.getSource() == btnMoveDireitaSimples){
 			trataTable.validaTransferencia(tbPagoModel, tbPagarModel, tbPagar.getSelectedRows());
-		} else if(e.getSource() == moveDireitaTotal){
+		} else if(e.getSource() == btnMoveDireitaTotal){
 			trataTable.validaTransferencia(tbPagoModel, tbPagarModel);
+		} else if(e.getSource() == btnProcurar){
+			
 		}
 	}
 

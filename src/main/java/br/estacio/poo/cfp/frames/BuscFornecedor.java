@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 
 import br.estacio.poo.cfp.dao.CidadeDao;
 import br.estacio.poo.cfp.dao.EstadoDao;
+import br.estacio.poo.cfp.dao.FornecedorDao;
+import br.estacio.poo.cfp.util.FornecedorTableModel;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.TrataComboBox;
 import br.estacio.poo.cfp.util.ValidaCampos;
@@ -22,6 +24,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 
 public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyListener, ActionListener{
 
@@ -41,14 +44,18 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
     private JComboBox<String> cmbxCidade;
     private CidadeDao cidadeDao = new CidadeDao();
     private JButton btnCancelar;
-    private JButton btnOk;
+    private JButton btnRetornar;
     private JTable tbResult;
     private JScrollPane scpResult;
+	private FornecedorTableModel tbResultModel;
+	private JButton btnConsultar;
+	private FornecedorDao fornecedorDao;
 
 	public BuscFornecedor() {
 		getContentPane().setLayout(null);
 		
 		imagens = new Imagens();
+		fornecedorDao = new FornecedorDao();
 		
 		lblNome = new JLabel("Nome");
 		lblNome.setBounds(10, 11, 27, 14);
@@ -86,24 +93,27 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 		btnCancelar.setBounds(425, 425, 95, 25);
 		getContentPane().add(btnCancelar);
 		
-		btnOk = new JButton("Ok");
-		btnOk.setIcon(imagens.getImagens(12));
-		btnOk.setBounds(320, 425, 95, 25);
-		btnOk.addActionListener(this);
-		getContentPane().add(btnOk);
+		btnRetornar = new JButton("Ok");
+		btnRetornar.setIcon(imagens.getImagens(12));
+		btnRetornar.setBounds(320, 425, 95, 25);
+		btnRetornar.addActionListener(this);
+		getContentPane().add(btnRetornar);
 		
 		scpResult = new JScrollPane();
 		scpResult.setBounds(10, 101, 510, 313);
 		getContentPane().add(scpResult);
 		
 		tbResult = new JTable();
+		tbResult.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tbResultModel = new FornecedorTableModel();
+		tbResult.setModel(tbResultModel);
 		scpResult.setViewportView(tbResult);
 		
-		JButton button = new JButton("Consultar");
-		button.setIcon(imagens.getImagens(7));
-		button.setBounds(419, 69, 101, 25);
-		getContentPane().add(button);
-		
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.setIcon(imagens.getImagens(7));
+		btnConsultar.addActionListener(this);
+		btnConsultar.setBounds(419, 69, 101, 25);
+		getContentPane().add(btnConsultar);	
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Consulta de Fornecedores");
@@ -118,8 +128,11 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == btnOk){
+		if(e.getSource() == btnRetornar){
 			
+		} else if(e.getSource() == btnConsultar){
+			tbResultModel.limpaModel();
+			fornecedorDao.todosComNome(nome.getText(), tbResultModel);
 		}
 	}
 

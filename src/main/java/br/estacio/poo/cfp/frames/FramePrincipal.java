@@ -36,7 +36,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
     ImageIcon system;
     ImageIcon sob;
     Color fundo;
-    JDesktopPane dPainel;
+    JDesktopPane dsktPane;
     
     JMenuBar menu;
     
@@ -69,7 +69,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
     Imagens imgs = new Imagens();
     TrataPanel manipulaPanel = new TrataPanel();
     
-    CadPagamento cPagamento = new CadPagamento();
+    CadPagamento cPagamento = new CadPagamento(dsktPane);
     CadRecebimento cRecebimento = new CadRecebimento();
     CadFornecedor cFornecedor = new CadFornecedor();
     CadCliente cCliente = new CadCliente();
@@ -99,8 +99,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
         rodape.setFont(new Font("Serif", Font.PLAIN, 12));
         rodape.setHorizontalAlignment(JLabel.CENTER);
         
-        dPainel = new JDesktopPane();
-        dPainel.add(tituloLogo);
+        dsktPane = new JDesktopPane();
+        dsktPane.add(tituloLogo);
         
         menu = new JMenuBar();
         
@@ -168,12 +168,12 @@ public class FramePrincipal extends JFrame implements ActionListener{
         logof.addActionListener(this);
         
         setJMenuBar(menu);
-        add(dPainel, BorderLayout.CENTER);
+        add(dsktPane, BorderLayout.CENTER);
         add(manipulaPanel.criaPanel(rodape, Color.LIGHT_GRAY, new FlowLayout()), BorderLayout.SOUTH);
         
         setIconImage(money.getImage());
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        dPainel.setBackground(new Color(7, 35, 66));
+        dsktPane.setBackground(new Color(7, 35, 66));
         setSize(300, 410);
         setExtendedState(MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
@@ -189,12 +189,11 @@ public class FramePrincipal extends JFrame implements ActionListener{
     }
     
     public void actionPerformed(ActionEvent e) {
-        JInternalFrame[] frames = dPainel.getAllFrames();
+        JInternalFrame[] frames = dsktPane.getAllFrames();
         
         if(e.getSource() == cadPagamento){
             if(!buscaFrame(cPagamento, frames)){
-            	cPagamento = new CadPagamento();
-                dPainel.add(cPagamento);
+                dsktPane.add(cPagamento);
                 try {
                     cPagamento.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -206,8 +205,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
             }            
         } else if(e.getSource() == cadRecebimento){
             if(!buscaFrame(cRecebimento, frames)){
-            	cRecebimento = new CadRecebimento();
-                dPainel.add(cRecebimento);
+                dsktPane.add(cRecebimento);
                 try {
                     cRecebimento.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -218,9 +216,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == cadFornecedor){
-            if(!buscaFrame(cFornecedor, frames)){
-            	cFornecedor = new CadFornecedor();                
-                dPainel.add(cFornecedor);
+            if(!buscaFrame(cFornecedor, frames)){              
+                dsktPane.add(cFornecedor);
                 try {
                     cFornecedor.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -231,9 +228,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == cadCliente){
-            if(!buscaFrame(cCliente, frames)){
-            	cCliente = new CadCliente();                
-                dPainel.add(cCliente);
+            if(!buscaFrame(cCliente, frames)){            
+                dsktPane.add(cCliente);
                 try {
                     cCliente.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -245,9 +241,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
             }
             
         } else if(e.getSource() == buscPagamento){
-            if(!buscaFrame(bPagamento, frames)){
-            	bPagamento = new BuscPagamento();                
-                dPainel.add(bPagamento);
+            if(!buscaFrame(bPagamento, frames)){            
+                dsktPane.add(bPagamento);
                 try {
                     bPagamento.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -258,9 +253,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == buscRecebimento){
-            if(!buscaFrame(bRecebimento, frames)){
-            	bRecebimento = new BuscRecebimento();                
-                dPainel.add(bRecebimento);
+            if(!buscaFrame(bRecebimento, frames)){       
+                dsktPane.add(bRecebimento);
                 try {
                     bRecebimento.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -272,8 +266,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
             }
         } else if(e.getSource() == buscFornecedor){
             if(!buscaFrame(bFornecedor, frames)){
-            	bFornecedor = new BuscFornecedor();                
-                dPainel.add(bFornecedor);
+                dsktPane.add(bFornecedor);
                 try {
                     bFornecedor.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -284,9 +277,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == buscCliente){
-            if(!buscaFrame(bCliente, frames)){
-            	bCliente = new BuscCliente();                
-                dPainel.add(bCliente);
+            if(!buscaFrame(bCliente, frames)){         
+                dsktPane.add(bCliente);
                 try {
                     bCliente.setSelected(true);
                 } catch (PropertyVetoException ex) {
@@ -298,8 +290,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
             }            
         } else if(e.getSource() == altSenha){
             if(!buscaFrame(senha, frames)){
-            	senha = new FrameRecSenha();
-                dPainel.add(senha);
+                dsktPane.add(senha);
                 try {
                     senha.setSelected(true);
                 } catch (PropertyVetoException ex) {
