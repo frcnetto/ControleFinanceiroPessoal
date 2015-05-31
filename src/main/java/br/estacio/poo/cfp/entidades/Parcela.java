@@ -15,34 +15,34 @@ public class Parcela {
 	private int id;
 	
 	@ManyToOne
-	@JoinColumn(name = "pagamento_id")
-	private Pagamento pagamento;
+	@JoinColumn(name = "conta_id")
+	private Conta conta;
 	private int numero;
 	private Calendar vencimento;
 	private double valor;
 	private boolean pago;
 	
 	public Parcela(){
-		this.pagamento = new Pagamento();
+		this.conta = new Conta();
 		this.numero = 0;
 		this.vencimento = Calendar.getInstance();
 		this.valor = 0;
 		this.pago = false;
 	}
 	
-	public Parcela(Pagamento pagamento, int numero, Calendar vencimento, double valor, boolean pago) {
-		this.pagamento = pagamento;
+	public Parcela(Conta conta, int numero, Calendar vencimento, double valor, boolean pago) {
+		this.conta = conta;
 		this.numero = numero;
 		this.vencimento = vencimento;
 		this.valor = valor;
 		this.pago = pago;
 	}
 
-	public Pagamento getPagamento() {
-		return pagamento;
+	public Conta getConta() {
+		return conta;
 	}
-	public void setPagamento(Pagamento pagamento) {
-		this.pagamento = pagamento;
+	public void setConta(Conta conta) {
+		this.conta = conta;
 	}
 	public int getNumero() {
 		return numero;

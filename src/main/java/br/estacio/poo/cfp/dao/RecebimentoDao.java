@@ -1,13 +1,15 @@
 package br.estacio.poo.cfp.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 import br.estacio.poo.cfp.entidades.Cliente;
-import br.estacio.poo.cfp.entidades.Fornecedor;
-import br.estacio.poo.cfp.entidades.Pagamento;
+import br.estacio.poo.cfp.entidades.Parcela;
 import br.estacio.poo.cfp.entidades.Recebimento;
 import br.estacio.poo.cfp.persistence.Conexao;
 
@@ -22,7 +24,8 @@ public class RecebimentoDao {
         conexao.persisteUm(novo);
     }
     
-    public List<Recebimento> buscaPeloCliente(Cliente cliente) {
+    @SuppressWarnings("unchecked")
+	public List<Recebimento> buscaPeloCliente(Cliente cliente) {
     	conexao.criaConexao();
     	try{
 	    	Query query = conexao.criaQuery("SELECT r FROM Recebimento r WHERE r.cliente_id = :cliente_cod");
@@ -33,6 +36,27 @@ public class RecebimentoDao {
     	}catch(NoResultException e){
     		conexao.fechaConexao();
     		return null;
+    	}
+	}
+
+	public void cadastraRecebimento(Recebimento recebimento, ArrayList<Parcela> parcelas) {
+		try{
+	    	conexao.criaConexao();
+	    	conexao.persisteVarios(recebimento);
+			for (int i = 0; i < parcelas.size(); i++) {
+	    		conexao.persisteVarios(parcelas.get(i));
+			}
+			conexao.fechaConexao();    	
+	        JOptionPane.showMessageDialog(null, "Recebimento cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+    	} catch(PersistenceException e){
+//    		JOptionPane.showMessageDialog(
+//    				null, 
+//    				"Não foi possível cadastrar o pagamento devido a algum erro interno!\n"
+//    				+ "Detalhes:\n" 
+//					+ 
+    				e.printStackTrace();
+//    				"Erro", 
+//    				JOptionPane.ERROR_MESSAGE);
     	}
 	}
 }

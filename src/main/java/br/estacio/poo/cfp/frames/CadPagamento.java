@@ -10,11 +10,13 @@ import net.sourceforge.jdatepicker.impl.JDatePickerImpl;
 import net.sourceforge.jdatepicker.impl.UtilDateModel;
 import br.estacio.poo.cfp.dao.FornecedorDao;
 import br.estacio.poo.cfp.dao.PagamentoDao;
+import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.entidades.Pagamento;
 import br.estacio.poo.cfp.entidades.Parcela;
 import br.estacio.poo.cfp.util.DateLabelFormatter;
 import br.estacio.poo.cfp.util.Imagens;
 import br.estacio.poo.cfp.util.JMoneyField;
+import br.estacio.poo.cfp.util.TrataJInternalFrame;
 import br.estacio.poo.cfp.util.TrataTable;
 import br.estacio.poo.cfp.util.ValidaCampos;
 
@@ -90,12 +92,23 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 	private ValidaCampos valida;
 	private JButton btnAdicionar;
 	private TrataTable trataTable;
+	private ArrayList<Parcela> parcelas;
+	private BuscFornecedor buscFornecedor = new BuscFornecedor();
+	private JDesktopPane dsktLocal;
+	private TrataJInternalFrame trataJInternalFrame = new TrataJInternalFrame();
+	private Fornecedor fornecedor;
+	
 	Locale locBrazil = new Locale("pt", "BR");
 	NumberFormat nf = NumberFormat.getInstance(locBrazil);
-	private ArrayList<Parcela> parcelas;
+	
+	public CadPagamento(){
+		
+	}
 
 	public CadPagamento(final JDesktopPane dsktPane) {
 		getContentPane().setLayout(null);
+		
+		dsktLocal = dsktPane;
 		
 		valida = new ValidaCampos();
 		trataTable = new TrataTable();
@@ -111,12 +124,11 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 		getContentPane().add(tfFornecedor);
 		tfFornecedor.setColumns(10);
 		
+		fornecedor = new Fornecedor();
+		
 		btnProcurar = new JButton();
 		btnProcurar.setIcon(imagens.getImagens(7));
-		btnProcurar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		btnProcurar.addActionListener(this);
 		btnProcurar.setBounds(490, 26, 49, 20);
 		getContentPane().add(btnProcurar);
 		
@@ -281,6 +293,14 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
         setFrameIcon(imagens.getImagens(0));
         setVisible(true);
 	}
+	
+	public Fornecedor getFornecedor() {
+		return this.fornecedor;
+	}
+
+	public void setFornecedor(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
+	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {		
@@ -313,7 +333,7 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 										Parcela parcela;
 										parcelas = new ArrayList<Parcela>();
 										
-										pagamento.setFornecedor(fornecedorDao.primeiroComNome(tfFornecedor.getText()));
+										pagamento.setFornecedor(fornecedorDao.buscaFornecedor(fornecedor));
 										pagamento.setDtPagamento(trataTable.retornaCalendar(dtPagamentoPicker.getJFormattedTextField().getText()));
 										try {
 											pagamento.setValor((double) nf.parse(valor.getText()));
@@ -329,7 +349,7 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 										
 										for(int i = 0; i < tbPagarModel.getRowCount(); i++){
 											parcela = new Parcela();
-											parcela.setPagamento(pagamento);
+											parcela.setConta(pagamento);
 											parcela.setNumero(Integer.parseInt(tbPagarModel.getValueAt(i, 0).toString()));
 											parcela.setVencimento(trataTable.retornaCalendar(tbPagarModel.getValueAt(i, 1).toString()));
 											parcela.setValor(Float.parseFloat(tbPagarModel.getValueAt(i, 2).toString()));
@@ -339,7 +359,7 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 
 										for(int i = 0; i < tbPagoModel.getRowCount(); i++){
 											parcela = new Parcela();
-											parcela.setPagamento(pagamento);
+											parcela.setConta(pagamento);
 											parcela.setNumero(Integer.parseInt(tbPagoModel.getValueAt(i, 0).toString()));
 											parcela.setVencimento(trataTable.retornaCalendar(tbPagoModel.getValueAt(i, 1).toString()));
 											parcela.setValor(Float.parseFloat(tbPagoModel.getValueAt(i, 2).toString()));
@@ -367,7 +387,7 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 					JOptionPane.showMessageDialog(null, "Campo Data do Pagamento é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
 				}
 			} else{
-				JOptionPane.showMessageDialog(null, "Campo fornecedor é um campo obrigatório!", "Erro!", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Campo fornecedor é um campo obrigatório! Busque um Fornecedor clicando na lupa.", "Erro!", JOptionPane.ERROR_MESSAGE);
 			}			
 		}else if(e.getSource() == btnAdicionar){
 			trataTable.validaAdicao(tbPagarModel, Integer.parseInt(qtdParcelas.getText()), (Calendar)dtVencimentoPicker.getModel().getValue(), valor.getText());
@@ -380,7 +400,10 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 		} else if(e.getSource() == btnMoveDireitaTotal){
 			trataTable.validaTransferencia(tbPagoModel, tbPagarModel);
 		} else if(e.getSource() == btnProcurar){
-			
+			if(!trataJInternalFrame.buscaFrame(buscFornecedor, dsktLocal.getAllFrames())){
+				buscFornecedor = new BuscFornecedor(this);
+				dsktLocal.add(buscFornecedor);
+			}				
 		}
 	}
 
@@ -395,5 +418,9 @@ public class CadPagamento extends JInternalFrame implements KeyListener, ActionL
 				btnAdicionar.setEnabled(false);
 			}
 		}
+	}
+
+	public void setNome(String nome) {
+		tfFornecedor.setText(nome);		
 	}
 }

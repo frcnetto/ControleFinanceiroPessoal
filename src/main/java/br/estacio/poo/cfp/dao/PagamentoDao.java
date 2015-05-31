@@ -22,7 +22,7 @@ public class PagamentoDao {
     
     public void cadastraPagamento(Pagamento pagamento, List<Parcela> parcelas){
     	try{
-	    	conexao.criaConexao();	
+	    	conexao.criaConexao();
 	    	conexao.persisteVarios(pagamento);
 			for (int i = 0; i < parcelas.size(); i++) {
 	    		conexao.persisteVarios(parcelas.get(i));
@@ -30,11 +30,14 @@ public class PagamentoDao {
 			conexao.fechaConexao();    	
 	        JOptionPane.showMessageDialog(null, "Pagamento cadastrado com sucesso!", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
     	} catch(PersistenceException e){
-    		JOptionPane.showMessageDialog(
-    				null, 
-    				"Não foi possível cadastrar o pagamento devido a algum erro interno!/n/nDetalhes:/n" + e.getMessage(), 
-    				"Erro", 
-    				JOptionPane.ERROR_MESSAGE);
+//    		JOptionPane.showMessageDialog(
+//    				null, 
+//    				"Não foi possível cadastrar o pagamento devido a algum erro interno!\n"
+//    				+ "Detalhes:\n" 
+//					+ 
+    				e.printStackTrace();
+//    				"Erro", 
+//    				JOptionPane.ERROR_MESSAGE);
     	}
     }
     

@@ -1,14 +1,18 @@
 package br.estacio.poo.cfp.entidades;
 
 import java.util.Calendar;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.OneToMany;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -31,6 +35,9 @@ public class Conta{
     private boolean parcela;
     private int totParcela = 0;
     private String situacao;
+    
+    @OneToMany(mappedBy = "conta", targetEntity = Parcela.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Parcela> parcelas;
     
     public Conta(){
     	super();
@@ -126,5 +133,13 @@ public class Conta{
 
     public void setSituacao(String situacao) {
         this.situacao = situacao;
-    }    
+    }     
+
+	public List<Parcela> getParcelas() {
+		return parcelas;
+	}
+
+	public void setParcelas(List<Parcela> parcelas) {
+		this.parcelas = parcelas;
+	}
 }

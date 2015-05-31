@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.swing.JOptionPane;
 
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.persistence.Conexao;
@@ -21,21 +20,23 @@ public class FornecedorDao {
         conexao.persisteUm(novo);
     }
     
-    public Fornecedor primeiroComNome(String nome) {
+    public Fornecedor buscaFornecedor(Fornecedor fornecedor) {
     	conexao.criaConexao();
     	try{
-	    	Query query = conexao.criaQuery("SELECT f FROM Fornecedor f WHERE f.nome = :nome");  	  
-	    	query.setParameter("nome", nome);
-	    	Fornecedor fornecedor = (Fornecedor) query.getSingleResult();
+	    	Query query = conexao.criaQuery("SELECT f FROM Fornecedor f WHERE f.id = :id");  	  
+	    	query.setParameter("id", fornecedor.getCod());
+	    	fornecedor = (Fornecedor) query.getSingleResult();
 	    	conexao.fechaConexao();
 	    	return fornecedor;
     	}catch(NoResultException e){
     		conexao.fechaConexao();
+    		e.printStackTrace();
     		return null;
     	}
 	}
     
-    public void todosComNome(String nome, FornecedorTableModel tabela) {
+    @SuppressWarnings("unchecked")
+	public void todosComNome(String nome, FornecedorTableModel tabela) {
     	conexao.criaConexao();
     	try{
     		nome = "%" + nome + "%";

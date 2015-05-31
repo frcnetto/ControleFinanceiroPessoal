@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -13,7 +14,7 @@ public class Fornecedor extends Pessoa{
     private String tipo;    
     private float valorl;
     private String descricao;
-    @OneToMany(mappedBy = "fornecedor")
+    @OneToMany(mappedBy = "fornecedor", targetEntity = Pagamento.class, fetch = FetchType.LAZY)
     private List<Pagamento> pagamentos;
     
     public Fornecedor(){

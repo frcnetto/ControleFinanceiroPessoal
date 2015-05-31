@@ -1,7 +1,9 @@
 package br.estacio.poo.cfp.frames;
 
 import br.estacio.poo.cfp.util.Imagens;
+import br.estacio.poo.cfp.util.TrataJInternalFrame;
 import br.estacio.poo.cfp.util.TrataPanel;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -11,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
@@ -36,7 +39,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
     ImageIcon system;
     ImageIcon sob;
     Color fundo;
-    JDesktopPane dsktPane;
+    JDesktopPane dsktPane = new JDesktopPane();
     
     JMenuBar menu;
     
@@ -68,9 +71,10 @@ public class FramePrincipal extends JFrame implements ActionListener{
     
     Imagens imgs = new Imagens();
     TrataPanel manipulaPanel = new TrataPanel();
+    TrataJInternalFrame trataJInternalFrame = new TrataJInternalFrame();
     
     CadPagamento cPagamento = new CadPagamento(dsktPane);
-    CadRecebimento cRecebimento = new CadRecebimento();
+    CadRecebimento cRecebimento = new CadRecebimento(dsktPane);
     CadFornecedor cFornecedor = new CadFornecedor();
     CadCliente cCliente = new CadCliente();
     BuscPagamento bPagamento = new BuscPagamento();
@@ -99,7 +103,6 @@ public class FramePrincipal extends JFrame implements ActionListener{
         rodape.setFont(new Font("Serif", Font.PLAIN, 12));
         rodape.setHorizontalAlignment(JLabel.CENTER);
         
-        dsktPane = new JDesktopPane();
         dsktPane.add(tituloLogo);
         
         menu = new JMenuBar();
@@ -178,21 +181,14 @@ public class FramePrincipal extends JFrame implements ActionListener{
         setExtendedState(MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
-    }    
-    
-    public boolean buscaFrame(JInternalFrame frame, JInternalFrame[] frames){    	
-        for (JInternalFrame f : frames) {
-            if(f.getClass().equals(frame.getClass()))
-                return true;
-        }        
-        return false;
     }
     
     public void actionPerformed(ActionEvent e) {
         JInternalFrame[] frames = dsktPane.getAllFrames();
         
         if(e.getSource() == cadPagamento){
-            if(!buscaFrame(cPagamento, frames)){
+            if(!trataJInternalFrame.buscaFrame(cPagamento, frames)){
+            	cPagamento = new CadPagamento(dsktPane);
                 dsktPane.add(cPagamento);
                 try {
                     cPagamento.setSelected(true);
@@ -204,7 +200,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }            
         } else if(e.getSource() == cadRecebimento){
-            if(!buscaFrame(cRecebimento, frames)){
+            if(!trataJInternalFrame.buscaFrame(cRecebimento, frames)){
+            	cRecebimento = new CadRecebimento(dsktPane);
                 dsktPane.add(cRecebimento);
                 try {
                     cRecebimento.setSelected(true);
@@ -216,7 +213,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == cadFornecedor){
-            if(!buscaFrame(cFornecedor, frames)){              
+            if(!trataJInternalFrame.buscaFrame(cFornecedor, frames)){     
+            	cFornecedor = new CadFornecedor();
                 dsktPane.add(cFornecedor);
                 try {
                     cFornecedor.setSelected(true);
@@ -228,7 +226,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == cadCliente){
-            if(!buscaFrame(cCliente, frames)){            
+            if(!trataJInternalFrame.buscaFrame(cCliente, frames)){   
+            	cCliente = new CadCliente();
                 dsktPane.add(cCliente);
                 try {
                     cCliente.setSelected(true);
@@ -241,7 +240,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
             }
             
         } else if(e.getSource() == buscPagamento){
-            if(!buscaFrame(bPagamento, frames)){            
+            if(!trataJInternalFrame.buscaFrame(bPagamento, frames)){       
+            	bPagamento = new BuscPagamento();
                 dsktPane.add(bPagamento);
                 try {
                     bPagamento.setSelected(true);
@@ -253,7 +253,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == buscRecebimento){
-            if(!buscaFrame(bRecebimento, frames)){       
+            if(!trataJInternalFrame.buscaFrame(bRecebimento, frames)){  
+            	bRecebimento = new BuscRecebimento();
                 dsktPane.add(bRecebimento);
                 try {
                     bRecebimento.setSelected(true);
@@ -265,7 +266,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == buscFornecedor){
-            if(!buscaFrame(bFornecedor, frames)){
+            if(!trataJInternalFrame.buscaFrame(bFornecedor, frames)){
+            	bFornecedor = new BuscFornecedor();
                 dsktPane.add(bFornecedor);
                 try {
                     bFornecedor.setSelected(true);
@@ -277,7 +279,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }
         } else if(e.getSource() == buscCliente){
-            if(!buscaFrame(bCliente, frames)){         
+            if(!trataJInternalFrame.buscaFrame(bCliente, frames)){    
+            	bCliente = new BuscCliente();
                 dsktPane.add(bCliente);
                 try {
                     bCliente.setSelected(true);
@@ -289,7 +292,8 @@ public class FramePrincipal extends JFrame implements ActionListener{
                 
             }            
         } else if(e.getSource() == altSenha){
-            if(!buscaFrame(senha, frames)){
+            if(!trataJInternalFrame.buscaFrame(senha, frames)){
+            	senha = new FrameRecSenha();
                 dsktPane.add(senha);
                 try {
                     senha.setSelected(true);
