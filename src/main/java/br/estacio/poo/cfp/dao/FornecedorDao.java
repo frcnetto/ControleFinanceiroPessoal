@@ -5,10 +5,8 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
-import br.estacio.poo.cfp.entidades.Cliente;
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.persistence.Conexao;
-import br.estacio.poo.cfp.util.ClienteTableModel;
 import br.estacio.poo.cfp.util.FornecedorTableModel;
 
 public class FornecedorDao {

@@ -7,10 +7,12 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
+import br.estacio.poo.cfp.entidades.Pagamento;
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.entidades.Pagamento;
 import br.estacio.poo.cfp.entidades.Parcela;
 import br.estacio.poo.cfp.persistence.Conexao;
+import br.estacio.poo.cfp.util.PagamentoTableModel;
 
 public class PagamentoDao {
     Conexao conexao = new Conexao();
@@ -37,17 +39,18 @@ public class PagamentoDao {
     }
     
     @SuppressWarnings("unchecked")
-	public List<Pagamento> buscaPeloFornecedor(Fornecedor fornecedor) {
-    	conexao.criaConexao();
+	public void todosComNome(Fornecedor fornecedor, PagamentoTableModel tabela) {
+		conexao.criaConexao();
     	try{
-	    	Query query = conexao.criaQuery("SELECT p FROM Pagamento p WHERE p.fornecedor_id = :fornecedor_cod");  	  
-	    	query.setParameter("fornecedor_cod", fornecedor.getCod());
-	    	List<Pagamento> pagamento = query.getResultList();
+	    	Query query = conexao.criaQuery("SELECT p FROM Pagamento p WHERE p.fornecedor_id = :id");  	  
+	    	query.setParameter("id", fornecedor.getCod());
+			List<Pagamento> pagamentos = query.getResultList();
 	    	conexao.fechaConexao();
-	    	return pagamento;
+	    	for(Pagamento p : pagamentos){
+	    		tabela.addRow(p);
+	    	}
     	}catch(NoResultException e){
     		conexao.fechaConexao();
-    		return null;
     	}
 	}
 }
