@@ -12,6 +12,7 @@ import br.estacio.poo.cfp.entidades.Cliente;
 import br.estacio.poo.cfp.entidades.Parcela;
 import br.estacio.poo.cfp.entidades.Recebimento;
 import br.estacio.poo.cfp.persistence.Conexao;
+import br.estacio.poo.cfp.util.RecebimentoTableModel;
 
 public class RecebimentoDao {
     Conexao conexao = new Conexao();
@@ -25,17 +26,18 @@ public class RecebimentoDao {
     }
     
     @SuppressWarnings("unchecked")
-	public List<Recebimento> buscaPeloCliente(Cliente cliente) {
-    	conexao.criaConexao();
+	public void todosCliente(Cliente cliente, RecebimentoTableModel tabela) {
+		conexao.criaConexao();
     	try{
-	    	Query query = conexao.criaQuery("SELECT r FROM Recebimento r WHERE r.cliente_id = :cliente_cod");
-	    	query.setParameter("cliente_cod", cliente.getCod());
-	    	List<Recebimento> pagamento = query.getResultList();
+	    	Query query = conexao.criaQuery("SELECT r FROM Recebimento r WHERE r.cliente = :cliente");  	  
+	    	query.setParameter("cliente", cliente);
+			List<Recebimento> recebimentos = query.getResultList();
 	    	conexao.fechaConexao();
-	    	return pagamento;
+	    	for(Recebimento r : recebimentos){
+	    		tabela.addRow(r);
+	    	}
     	}catch(NoResultException e){
     		conexao.fechaConexao();
-    		return null;
     	}
 	}
 

@@ -6,29 +6,29 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import br.estacio.poo.cfp.entidades.Fornecedor;
-import br.estacio.poo.cfp.entidades.Pagamento;
+import br.estacio.poo.cfp.entidades.Cliente;
+import br.estacio.poo.cfp.entidades.Recebimento;
 
-public class PagamentoTableModel extends AbstractTableModel{
+public class RecebimentoTableModel extends AbstractTableModel{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6436332118940791750L;
-	private List<Pagamento> linhas;
+	private List<Recebimento> linhas;
 	private String[] colunas = {"Id",       "Descriçao",         "Emissao", "Parcela", 
 								"Situaçao", "Total de Parcelas", "Valor",   "Vencimento", 
-								"Fornecedor", "Data de Pagamento"};
+								"Cliente", "Data de Recebimento"};
 	
-	public PagamentoTableModel(){
-		linhas = new ArrayList<Pagamento>();
+	public RecebimentoTableModel(){
+		linhas = new ArrayList<Recebimento>();
 	}
 	
-	public void addRow(Pagamento pagamento){
-        this.linhas.add(pagamento);
+	public void addRow(Recebimento recebimento){
+        this.linhas.add(recebimento);
         this.fireTableDataChanged();
     }
 	
-	public Pagamento getLinha(int linha){
+	public Recebimento getLinha(int linha){
 		return linhas.get(linha);
 	}
 	
@@ -71,8 +71,8 @@ public class PagamentoTableModel extends AbstractTableModel{
 	        case 5: return linhas.get(linha).getTotParcela();
 	        case 6: return linhas.get(linha).getValor();
 	        case 7: return linhas.get(linha).getVencimento();
-	        case 8: return linhas.get(linha).getFornecedor();
-	        case 9: return linhas.get(linha).getDtPagamento();
+	        case 8: return linhas.get(linha).getCliente();
+	        case 9: return linhas.get(linha).getDtRecebimento();
 		}
 		return null;
 	}
@@ -87,8 +87,8 @@ public class PagamentoTableModel extends AbstractTableModel{
         case 5: linhas.get(linha).setTotParcela((int) valor);
         case 6: linhas.get(linha).setValor((double) valor);
         case 7: linhas.get(linha).setVencimento((Calendar) valor);
-        case 8: linhas.get(linha).setFornecedor((Fornecedor) valor);
-        case 9: linhas.get(linha).setDtPagamento((Calendar) valor);
+        case 8: linhas.get(linha).setCliente((Cliente) valor);
+        case 9: linhas.get(linha).setDtRecebimento((Calendar) valor);
 		}
 		this.fireTableRowsUpdated(linha, linha);
 	}

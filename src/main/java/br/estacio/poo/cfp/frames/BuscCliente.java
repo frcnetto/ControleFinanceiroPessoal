@@ -50,17 +50,10 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 	private ClienteTableModel tbResultModel;
 	private JButton btnConsultar;
 	private ClienteDao clienteDao;
-	CadRecebimento framePai;
+	private CadRecebimento framePaiCRecebimento;
+	private BuscRecebimento framePaiBRecebimento;
 
 	public BuscCliente() {
-		inicializaComponets();
-	}
-	
-	public BuscCliente(final CadRecebimento framePai) {
-		inicializaComponets(framePai);
-	}
-
-	private void inicializaComponets(){
 		getContentPane().setLayout(null);
 		
 		imagens = new Imagens();
@@ -131,13 +124,13 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
         setIconifiable(true);
         setResizable(true);
         setFrameIcon(imagens.getImagens(0));
-        setVisible(true);
+        setVisible(true);	
 	}
 	
-	private void inicializaComponets(CadRecebimento framePai){
+	public BuscCliente(final CadRecebimento framePai) {
 		getContentPane().setLayout(null);
 		
-		this.framePai = framePai;
+		this.framePaiCRecebimento = framePai;
 		
 		imagens = new Imagens();
 		clienteDao = new ClienteDao();
@@ -162,6 +155,7 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
 		
 		cmbxCidade = new JComboBox<String>();
 		cmbxCidade.setBounds(166, 70, 146, 20);
+		cidadeModel = manipulaCombo.carregaCombo(cmbxCidade, cidadeDao.carregaCidade());
 		cmbxCidade.setModel(cidadeModel);
 		getContentPane().add(cmbxCidade);
 		
@@ -211,14 +205,97 @@ public class BuscCliente extends JInternalFrame implements ItemListener, KeyList
         toFront();
 	}
 	
+	public BuscCliente(final BuscRecebimento framePai) {
+		getContentPane().setLayout(null);
+		
+		this.framePaiBRecebimento = framePai;
+		
+		imagens = new Imagens();
+		clienteDao = new ClienteDao();
+		
+		lblNome = new JLabel("Nome");
+		lblNome.setBounds(10, 11, 27, 14);
+		getContentPane().add(lblNome);
+		
+		nome = new JFormattedTextField();
+		nome.setBounds(10, 27, 510, 20);
+		nome.addKeyListener(this);
+		getContentPane().add(nome);
+		nome.setColumns(10);
+		
+		lblUf = new JLabel("UF");
+		lblUf.setBounds(10, 54, 13, 14);
+		getContentPane().add(lblUf);
+		
+		lblCidade = new JLabel("Cidade");
+		lblCidade.setBounds(166, 54, 33, 14);
+		getContentPane().add(lblCidade);
+		
+		cmbxCidade = new JComboBox<String>();
+		cmbxCidade.setBounds(166, 70, 146, 20);
+		cidadeModel = manipulaCombo.carregaCombo(cmbxCidade, cidadeDao.carregaCidade());
+		cmbxCidade.setModel(cidadeModel);
+		getContentPane().add(cmbxCidade);
+		
+		cmbxUF = new JComboBox<String>();
+		cmbxUF.setBounds(10, 70, 146, 20);
+		ufModel = manipulaCombo.carregaCombo(cmbxUF, estadoDao.carregaUf());
+        cmbxUF.setModel(ufModel);
+		cmbxUF.addItemListener(this);
+		getContentPane().add(cmbxUF);
+		
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setIcon(imagens.getImagens(1));
+		btnCancelar.setBounds(425, 425, 95, 25);
+		getContentPane().add(btnCancelar);
+		
+		btnRetornar = new JButton("Ok");
+		btnRetornar.setIcon(imagens.getImagens(12));
+		btnRetornar.setBounds(320, 425, 95, 25);
+		btnRetornar.addActionListener(this);
+		getContentPane().add(btnRetornar);
+		
+		scpResult = new JScrollPane();
+		scpResult.setBounds(10, 101, 510, 313);
+		getContentPane().add(scpResult);
+		
+		tbResult = new JTable();
+		tbResult.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tbResultModel = new ClienteTableModel();
+		tbResult.setModel(tbResultModel);
+		scpResult.setViewportView(tbResult);
+		
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.setIcon(imagens.getImagens(7));
+		btnConsultar.addActionListener(this);
+		btnConsultar.setBounds(419, 69, 101, 25);
+		getContentPane().add(btnConsultar);	
+		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setTitle("Consulta de Clientes");
+		setSize(546, 488);
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
+        setFrameIcon(imagens.getImagens(0));
+        setVisible(true);
+        toFront();
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnRetornar){
-			if(framePai != null){
-				framePai.setCliente(tbResultModel.getLinha(tbResult.getSelectedRow()));
-				framePai.setNome(framePai.getCliente().getNome());
-				this.dispose();
+			if(framePaiCRecebimento != null || framePaiBRecebimento != null){
+				if(framePaiCRecebimento != null){
+					framePaiCRecebimento.setCliente(tbResultModel.getLinha(tbResult.getSelectedRow()));
+					framePaiCRecebimento.setNome(framePaiCRecebimento.getCliente().getNome());
+					this.dispose();
+				} else if(framePaiBRecebimento != null){
+					framePaiBRecebimento.setCliente(tbResultModel.getLinha(tbResult.getSelectedRow()));
+					framePaiBRecebimento.setNome(framePaiBRecebimento.getCliente().getNome());
+					this.dispose();
+				}
 			} else{
 				this.dispose();
 			}

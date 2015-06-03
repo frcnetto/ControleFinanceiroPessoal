@@ -50,17 +50,10 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 	private FornecedorTableModel tbResultModel;
 	private JButton btnConsultar;
 	private FornecedorDao fornecedorDao;
-	CadPagamento framePai;
+	private CadPagamento framePaiCPagamento;
+	private BuscPagamento framePaiBPagamento;
 
 	public BuscFornecedor() {
-		inicializaComponets();
-	}
-	
-	public BuscFornecedor(final CadPagamento framePai) {
-		inicializaComponets(framePai);
-	}
-
-	private void inicializaComponets(){
 		getContentPane().setLayout(null);
 		
 		imagens = new Imagens();
@@ -135,10 +128,10 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
         setVisible(true);
 	}
 	
-	private void inicializaComponets(CadPagamento framePai){
+	public BuscFornecedor(final CadPagamento framePai) {
 		getContentPane().setLayout(null);
 		
-		this.framePai = framePai;
+		this.framePaiCPagamento = framePai;
 		
 		imagens = new Imagens();
 		fornecedorDao = new FornecedorDao();
@@ -212,14 +205,96 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
         toFront();
 	}
 	
-	
+	public BuscFornecedor(final BuscPagamento framePai) {
+		getContentPane().setLayout(null);
+		
+		this.framePaiBPagamento = framePai;
+		
+		imagens = new Imagens();
+		fornecedorDao = new FornecedorDao();
+		
+		lblNome = new JLabel("Nome");
+		lblNome.setBounds(10, 11, 27, 14);
+		getContentPane().add(lblNome);
+		
+		nome = new JFormattedTextField();
+		nome.setBounds(10, 27, 510, 20);
+		nome.addKeyListener(this);
+		getContentPane().add(nome);
+		nome.setColumns(10);
+		
+		lblUf = new JLabel("UF");
+		lblUf.setBounds(10, 54, 13, 14);
+		getContentPane().add(lblUf);
+		
+		lblCidade = new JLabel("Cidade");
+		lblCidade.setBounds(166, 54, 33, 14);
+		getContentPane().add(lblCidade);
+		
+		cmbxCidade = new JComboBox<String>();
+		cmbxCidade.setBounds(166, 70, 146, 20);
+		cmbxCidade.setEnabled(false);
+		getContentPane().add(cmbxCidade);
+		
+		cmbxUF = new JComboBox<String>();
+		cmbxUF.setBounds(10, 70, 146, 20);
+		ufModel = manipulaCombo.carregaCombo(cmbxUF, estadoDao.carregaUf());
+        cmbxUF.setModel(ufModel);
+		cmbxUF.addItemListener(this);
+		getContentPane().add(cmbxUF);
+		
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setIcon(imagens.getImagens(1));
+		btnCancelar.setBounds(425, 425, 95, 25);
+		getContentPane().add(btnCancelar);
+		
+		btnRetornar = new JButton("Ok");
+		btnRetornar.setIcon(imagens.getImagens(12));
+		btnRetornar.setBounds(320, 425, 95, 25);
+		btnRetornar.addActionListener(this);
+		getContentPane().add(btnRetornar);
+		
+		scpResult = new JScrollPane();
+		scpResult.setBounds(10, 101, 510, 313);
+		getContentPane().add(scpResult);
+		
+		tbResult = new JTable();
+		tbResult.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tbResultModel = new FornecedorTableModel();
+		tbResult.setModel(tbResultModel);
+		scpResult.setViewportView(tbResult);
+		
+		btnConsultar = new JButton("Consultar");
+		btnConsultar.setIcon(imagens.getImagens(7));
+		btnConsultar.addActionListener(this);
+		btnConsultar.setBounds(419, 69, 101, 25);
+		getContentPane().add(btnConsultar);	
+		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setTitle("Consulta de Fornecedores");
+		setSize(546, 488);
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
+        setFrameIcon(imagens.getImagens(0));
+        setVisible(true);
+        toFront();
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnRetornar){
-			if(framePai != null){
-				framePai.setFornecedor(tbResultModel.getLinha(tbResult.getSelectedRow()));
-				framePai.setNome(framePai.getFornecedor().getNome());
-				this.dispose();
+			if(framePaiCPagamento != null || framePaiBPagamento != null){
+				if(framePaiCPagamento != null){
+					framePaiCPagamento.setFornecedor(tbResultModel.getLinha(tbResult.getSelectedRow()));
+					framePaiCPagamento.setNome(framePaiCPagamento.getFornecedor().getNome());
+					this.dispose();
+				} else if(framePaiBPagamento != null){
+					framePaiBPagamento.setFornecedor(tbResultModel.getLinha(tbResult.getSelectedRow()));
+					framePaiBPagamento.setNome(framePaiBPagamento.getFornecedor().getNome());
+					this.dispose();
+				}
 			} else{
 				this.dispose();
 			}
@@ -227,7 +302,6 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 			if(cmbxUF.getSelectedItem().equals("------")){
 				tbResultModel.limpaModel();
 				fornecedorDao.todosComNome(nome.getText(), tbResultModel);
-				tbResultModel.limpaModel();
 			} else if(cmbxCidade.getSelectedItem().equals("------")){
 				tbResultModel.limpaModel();
 				fornecedorDao.todosComNome(nome.getText(), cmbxUF.getSelectedItem().toString(), tbResultModel);

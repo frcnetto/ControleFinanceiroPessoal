@@ -60,7 +60,7 @@ public class BuscPagamento extends JInternalFrame implements KeyListener, Action
 	private JButton btnConsultar;
 	private JTable tbResult;
 	private JScrollPane scpResult;
-	private PagamentoDao pagamentoDao;
+	private PagamentoDao pagamentoDao = new PagamentoDao();
 	private JButton btnBuscFornecedor;
 	private BuscFornecedor buscFornecedor = new BuscFornecedor();
 	private TrataJInternalFrame trataJInternalFrame = new TrataJInternalFrame();
@@ -281,6 +281,18 @@ public class BuscPagamento extends JInternalFrame implements KeyListener, Action
         setVisible(true);
 	} 
 
+	public void setFornecedor(Fornecedor fornecedor) {
+		this.fornecedor = fornecedor;
+	}
+
+	public Fornecedor getFornecedor() {
+		return this.fornecedor;
+	}
+
+	public void setNome(String nome) {
+		tfFornecedor.setText(nome);
+	}
+
 	@Override
 	public void keyPressed(KeyEvent e) {		
 	}
@@ -299,11 +311,13 @@ public class BuscPagamento extends JInternalFrame implements KeyListener, Action
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnConsultar){
-			pagamentoDao.todosComNome(fornecedor, tbResultModel);
+			if(fornecedor != null){
+				pagamentoDao.todosFornecedor(fornecedor, tbResultModel);
+			}
 		} else if(e.getSource() == btnBuscFornecedor){
 			if(!trataJInternalFrame.buscaFrame(buscFornecedor, dsktLocal.getAllFrames())){
-//				buscFornecedor = new BuscFornecedor(this.fornecedor);
-//				dsktLocal.add(buscFornecedor);
+				buscFornecedor = new BuscFornecedor(this);
+				dsktLocal.add(buscFornecedor);
 			}
 		}
 	}

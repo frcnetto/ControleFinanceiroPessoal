@@ -7,7 +7,6 @@ import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
-import br.estacio.poo.cfp.entidades.Pagamento;
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.entidades.Pagamento;
 import br.estacio.poo.cfp.entidades.Parcela;
@@ -39,11 +38,11 @@ public class PagamentoDao {
     }
     
     @SuppressWarnings("unchecked")
-	public void todosComNome(Fornecedor fornecedor, PagamentoTableModel tabela) {
+	public void todosFornecedor(Fornecedor fornecedor, PagamentoTableModel tabela) {
 		conexao.criaConexao();
     	try{
-	    	Query query = conexao.criaQuery("SELECT p FROM Pagamento p WHERE p.fornecedor_id = :id");  	  
-	    	query.setParameter("id", fornecedor.getCod());
+	    	Query query = conexao.criaQuery("SELECT p FROM Pagamento p WHERE p.fornecedor = :fornecedor");  	  
+	    	query.setParameter("fornecedor", fornecedor);
 			List<Pagamento> pagamentos = query.getResultList();
 	    	conexao.fechaConexao();
 	    	for(Pagamento p : pagamentos){

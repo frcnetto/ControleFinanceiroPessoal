@@ -78,7 +78,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
     CadFornecedor cFornecedor = new CadFornecedor();
     CadCliente cCliente = new CadCliente();
     BuscPagamento bPagamento = new BuscPagamento(dsktPane);
-    BuscRecebimento bRecebimento = new BuscRecebimento();
+    BuscRecebimento bRecebimento = new BuscRecebimento(dsktPane);
     BuscFornecedor bFornecedor = new BuscFornecedor();
     BuscCliente bCliente = new BuscCliente();
     FrameRecSenha senha = new FrameRecSenha();
@@ -254,7 +254,7 @@ public class FramePrincipal extends JFrame implements ActionListener{
             }
         } else if(e.getSource() == buscRecebimento){
             if(!trataJInternalFrame.buscaFrame(bRecebimento, frames)){  
-            	bRecebimento = new BuscRecebimento();
+            	bRecebimento = new BuscRecebimento(dsktPane);
                 dsktPane.add(bRecebimento);
                 try {
                     bRecebimento.setSelected(true);
