@@ -66,7 +66,8 @@ public class CadFornecedor extends JInternalFrame implements ItemListener, Actio
     private ValidaCampos valida = new ValidaCampos();
     private JLabel lblDescrio;
     private JTextArea descricao;
-
+    private Fornecedor fornecedor;
+    
 	public CadFornecedor() {
 		getContentPane().setLayout(null);
 		
@@ -188,6 +189,141 @@ public class CadFornecedor extends JInternalFrame implements ItemListener, Actio
         setVisible(true);
 	}
 
+	public CadFornecedor(Fornecedor fornecedor) {
+		getContentPane().setLayout(null);
+		
+		this.fornecedor = fornecedor;
+		
+		lblNome = new JLabel("Nome");
+		lblNome.setBounds(10, 11, 27, 14);
+		getContentPane().add(lblNome);
+		
+		nome = new JTextField(fornecedor.getNome());
+		nome.setBounds(10, 27, 510, 20);
+		nome.addKeyListener(this);
+		getContentPane().add(nome);
+		nome.setColumns(10);
+		
+		lblEndereo = new JLabel("Endere\u00E7o");
+		lblEndereo.setBounds(10, 52, 45, 14);
+		getContentPane().add(lblEndereo);
+		
+		lblUf = new JLabel("UF");
+		lblUf.setBounds(220, 52, 13, 14);
+		getContentPane().add(lblUf);
+		
+		lblCidade = new JLabel("Cidade");
+		lblCidade.setBounds(374, 52, 33, 14);
+		getContentPane().add(lblCidade);
+		
+		cmbxCidade = new JComboBox<String>();
+		cmbxCidade.setBounds(374, 68, 146, 20);
+		cmbxCidade.setEnabled(false);
+		getContentPane().add(cmbxCidade);
+		
+		cmbxUF = new JComboBox<String>();
+		cmbxUF.setBounds(220, 68, 146, 20);
+		ufModel = manipulaCombo.carregaCombo(cmbxUF, estadoDao.carregaUf());
+        cmbxUF.setModel(ufModel);
+		cmbxUF.addItemListener(this);
+		getContentPane().add(cmbxUF);
+		
+		cmbxUF.setSelectedIndex(fornecedor.getUf() - 1);
+		String cidade = cidadeDao.buscaId(fornecedor.getCidade());
+		
+		for(int i = 0; i < cidadeModel.getSize(); i++){
+			if(cidade.equals(cmbxCidade.getItemAt(i))){
+				cmbxCidade.setSelectedIndex(i);
+				continue;
+			}
+		}
+		
+		endereco = new JTextField(fornecedor.getEndereco());
+		endereco.setBounds(10, 68, 200, 20);
+		getContentPane().add(endereco);
+		endereco.setColumns(10);
+		
+		lblTelefone = new JLabel("Telefone");
+		lblTelefone.setBounds(10, 93, 42, 14);
+		getContentPane().add(lblTelefone);
+		
+		lblCelular = new JLabel("Celular");
+		lblCelular.setBounds(320, 93, 33, 14);
+		getContentPane().add(lblCelular);
+		
+		try {
+            mfTelefone = new MaskFormatter("(##) ####-####");
+        } catch (ParseException ex) {
+            Logger.getLogger(CadCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+		
+		telefone = new JFormattedTextField(mfTelefone);
+		telefone.setText(fornecedor.getTelefone());
+		telefone.setBounds(10, 110, 200, 20);
+		getContentPane().add(telefone);
+		
+		celular = new JFormattedTextField(mfTelefone);
+		celular.setText(fornecedor.getCelular());
+		celular.setBounds(320, 110, 200, 20);
+		getContentPane().add(celular);
+		
+		lblObservaes = new JLabel("Observa\u00E7\u00F5es");
+		lblObservaes.setBounds(10, 299, 63, 14);
+		getContentPane().add(lblObservaes);
+		
+		observacoes = new JTextArea(fornecedor.getObs());
+		observacoes.setBounds(10, 316, 510, 105);
+		getContentPane().add(observacoes);
+		
+		btnCancelar = new JButton("Cancelar");
+		btnCancelar.setBounds(431, 425, 89, 23);
+		getContentPane().add(btnCancelar);
+		
+		btnCadastrar = new JButton("Atualizar");
+		btnCadastrar.setBounds(332, 425, 89, 23);
+		btnCadastrar.addActionListener(this);
+		getContentPane().add(btnCadastrar);
+		
+		lblTipo = new JLabel("Tipo");
+		lblTipo.setBounds(10, 135, 20, 14);
+		getContentPane().add(lblTipo);
+		
+		lblValor = new JLabel("Valor");
+		lblValor.setBounds(320, 135, 46, 14);
+		getContentPane().add(lblValor);
+		
+		tipo = new JTextField(fornecedor.getTipo());
+		tipo.setBounds(10, 152, 200, 20);
+		getContentPane().add(tipo);
+		tipo.setColumns(10);
+		
+		valor = new JMoneyField();
+		valor.setText((String.valueOf(fornecedor.getValorl())));
+		valor.setHorizontalAlignment(SwingConstants.RIGHT);
+		valor.setBounds(320, 152, 200, 20);
+		getContentPane().add(valor);
+		valor.setColumns(10);
+		
+		lblDescrio = new JLabel("Descri\u00E7\u00E3o");
+		lblDescrio.setBounds(9, 177, 46, 14);
+		getContentPane().add(lblDescrio);
+		
+		descricao = new JTextArea(fornecedor.getDesc());
+		descricao.setBounds(10, 194, 510, 105);
+		getContentPane().add(descricao);
+		
+		imagens = new Imagens();	
+		
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		setTitle("Cadastro de Fornecedores");
+		setSize(546, 488);
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
+        setFrameIcon(imagens.getImagens(0));
+        setVisible(true);
+	}
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
@@ -222,7 +358,7 @@ public class CadFornecedor extends JInternalFrame implements ItemListener, Actio
 										novo.setNome(nome.getText());
 										novo.setEndereco(endereco.getText());
 										novo.setUf(estadoDao.carregaId(cmbxUF.getSelectedItem().toString()));
-										novo.setCidade(cidadeDao.carregaId(cmbxCidade.getSelectedItem().toString()));
+										novo.setCidade(cidadeDao.buscaId(cmbxCidade.getSelectedItem().toString()));
 										novo.setTelefone(telefone.getText());
 										novo.setCelular(celular.getText());
 										valor.setText(valor.getText().replaceAll(".", ""));
@@ -232,9 +368,15 @@ public class CadFornecedor extends JInternalFrame implements ItemListener, Actio
 										novo.setObs(observacoes.getText());
 										
 										FornecedorDao fornecedorDao = new FornecedorDao();
-										fornecedorDao.cadastraFornecedor(novo);
 										
-										JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso!", "Cadastro realizado!", JOptionPane.INFORMATION_MESSAGE);
+										if(fornecedor == null){
+											fornecedorDao.cadastraFornecedor(novo);
+											JOptionPane.showMessageDialog(null, "Fornecedor cadastrado com sucesso!", "Cadastro realizado!", JOptionPane.INFORMATION_MESSAGE);
+										} else{
+											
+											fornecedorDao.atualizaFornecedor(fornecedor);
+											JOptionPane.showMessageDialog(null, "Fornecedor atualizado com sucesso!", "Atualização realizada!", JOptionPane.INFORMATION_MESSAGE);
+										}
 										
 										nome.setText("");
 										endereco.setText("");

@@ -52,6 +52,16 @@ public class Conexao {
     	manager.persist(objeto);
     }
     
+    public void atualizaUm(Object objeto){
+    	criaConexao();
+    	objeto = manager.merge(objeto);
+    	fechaConexao();
+    }
+    
+    public Object atualizaVarios(Object objeto){
+    	return manager.merge(objeto);
+    }
+    
     public Query criaQuery(String query){
     	return manager.createQuery(query);
     }

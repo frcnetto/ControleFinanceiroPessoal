@@ -16,10 +16,12 @@ public class FornecedorDao {
     	
     }
     
+    /*Cadastro*/
     public void cadastraFornecedor(Fornecedor novo){
         conexao.persisteUm(novo);
     }
     
+    /*Buscas*/
     public Fornecedor buscaFornecedor(Fornecedor fornecedor) {
     	conexao.criaConexao();
     	try{
@@ -63,7 +65,7 @@ public class FornecedorDao {
     		EstadoDao estadoDao = new EstadoDao();
     		int estadoId = estadoDao.carregaId(estado);
     		CidadeDao cidadeDao = new CidadeDao();
-    		int cidadeId =cidadeDao.carregaId(cidade); 
+    		int cidadeId =cidadeDao.buscaId(cidade); 
 	    	Query query = conexao.criaQuery("SELECT f FROM Fornecedor f WHERE f.nome LIKE :nome AND f.uf = :uf AND f.cidade = :cidade");  	  
 	    	query.setParameter("nome", nome);
 	    	query.setParameter("uf", estadoId);
@@ -94,4 +96,14 @@ public class FornecedorDao {
     		conexao.fechaConexao();
     	}
 	}
+    
+    /*Atualização*/
+    public void atualizaFornecedor(Fornecedor fornecedor){
+    	conexao.criaConexao();
+    	Fornecedor vazio = new Fornecedor();
+    	vazio.setCod(fornecedor.getCod());
+    	vazio = (Fornecedor) conexao.atualizaVarios(vazio);
+    	vazio = fornecedor;
+    	conexao.fechaConexao();
+    }
 }

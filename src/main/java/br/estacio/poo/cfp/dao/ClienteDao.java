@@ -110,7 +110,7 @@ public class ClienteDao {
     		EstadoDao estadoDao = new EstadoDao();
     		int estadoId = estadoDao.carregaId(estado);
     		CidadeDao cidadeDao = new CidadeDao();
-    		int cidadeId =cidadeDao.carregaId(cidade); 
+    		int cidadeId =cidadeDao.buscaId(cidade); 
 	    	Query query = conexao.criaQuery("SELECT c FROM Cliente c WHERE c.nome LIKE :nome AND c.uf = :uf AND c.cidade = :cidade");  	  
 	    	query.setParameter("nome", nome);
 	    	query.setParameter("uf", estadoId);

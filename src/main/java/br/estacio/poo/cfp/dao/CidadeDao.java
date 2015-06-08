@@ -45,7 +45,7 @@ public class CidadeDao {
     	}
     }
 	
-	public int carregaId(String cidade){
+	public int buscaId(String cidade){
 		conexao.criaConexao();
     	int ret;
     	try{
@@ -57,6 +57,21 @@ public class CidadeDao {
     	}catch(NoResultException e){
     		conexao.fechaConexao();
     		return -1;
+    	}
+	}
+	
+	public String buscaId(int id){
+		conexao.criaConexao();
+    	String ret;
+    	try{
+	    	Query query = conexao.criaQuery("SELECT nome FROM Cidade WHERE id = :id");
+	    	query.setParameter("id", id);
+	    	ret = (String) query.getSingleResult();
+	    	conexao.fechaConexao();
+	    	return ret;
+    	}catch(NoResultException e){
+    		conexao.fechaConexao();
+    		return "";
     	}
 	}
 }

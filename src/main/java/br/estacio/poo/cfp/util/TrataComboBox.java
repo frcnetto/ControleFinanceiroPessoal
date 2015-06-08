@@ -12,7 +12,6 @@ public class TrataComboBox {
         DefaultComboBoxModel<String>  comboModel = (DefaultComboBoxModel<String>) comboBox.getModel();
         
         comboModel.removeAllElements();
-        comboModel.addElement("------");
         
         for (int linha = 0; linha < lista.size(); linha++){
             String estado = lista.get(linha);

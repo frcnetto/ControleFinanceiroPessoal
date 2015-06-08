@@ -215,7 +215,7 @@ public class CadCliente extends JInternalFrame implements ItemListener, KeyListe
 									novo.setNome(nome.getText());
 									novo.setEndereco(endereco.getText());
 									novo.setUf(estadoDao.carregaId(cmbxUF.getSelectedItem().toString()));
-									novo.setCidade(cidadeDao.carregaId(cmbxCidade.getSelectedItem().toString()));
+									novo.setCidade(cidadeDao.buscaId(cmbxCidade.getSelectedItem().toString()));
 									novo.setTelefone(telefone.getText());
 									novo.setCelular(celular.getText());
 									vlrMensal.setText(vlrMensal.getText().replaceAll(".", ""));
