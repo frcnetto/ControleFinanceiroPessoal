@@ -5,6 +5,8 @@ import java.util.List;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
+import org.hibernate.Session;
+
 import br.estacio.poo.cfp.entidades.Fornecedor;
 import br.estacio.poo.cfp.persistence.Conexao;
 import br.estacio.poo.cfp.util.FornecedorTableModel;
@@ -19,6 +21,10 @@ public class FornecedorDao {
     /*Cadastro*/
     public void cadastraFornecedor(Fornecedor novo){
         conexao.persisteUm(novo);
+    }
+    
+    public void excluirFornecedor(Fornecedor fornecedor){
+    	
     }
     
     /*Buscas*/
@@ -99,11 +105,6 @@ public class FornecedorDao {
     
     /*Atualização*/
     public void atualizaFornecedor(Fornecedor fornecedor){
-    	conexao.criaConexao();
-    	Fornecedor vazio = new Fornecedor();
-    	vazio.setCod(fornecedor.getCod());
-    	vazio = (Fornecedor) conexao.atualizaVarios(vazio);
-    	vazio = fornecedor;
-    	conexao.fechaConexao();
+    	conexao.atualizaUm(fornecedor);
     }
 }

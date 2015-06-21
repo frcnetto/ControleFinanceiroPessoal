@@ -57,6 +57,7 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 	private CadPagamento framePaiCPagamento;
 	private BuscPagamento framePaiBPagamento;
 	private JDesktopPane dsktPane;
+	private JButton btnExcluirSelecionado;
 
 	public BuscFornecedor() {
 		getContentPane().setLayout(null);
@@ -122,6 +123,11 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 		btnConsultar.addActionListener(this);
 		btnConsultar.setBounds(419, 69, 101, 25);
 		getContentPane().add(btnConsultar);	
+		
+		btnExcluirSelecionado = new JButton("Excluir selecionado");
+		btnExcluirSelecionado.addActionListener(this);
+		btnExcluirSelecionado.setBounds(189, 426, 123, 23);
+		getContentPane().add(btnExcluirSelecionado);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Consulta de Fornecedores");
@@ -199,6 +205,11 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 		btnConsultar.addActionListener(this);
 		btnConsultar.setBounds(419, 69, 101, 25);
 		getContentPane().add(btnConsultar);	
+		
+		btnExcluirSelecionado = new JButton("Excluir selecionado");
+		btnExcluirSelecionado.addActionListener(this);
+		btnExcluirSelecionado.setBounds(189, 426, 123, 23);
+		getContentPane().add(btnExcluirSelecionado);
 		
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle("Consulta de Fornecedores");
@@ -394,6 +405,8 @@ public class BuscFornecedor extends JInternalFrame implements ItemListener, KeyL
 				tbResultModel.limpaModel();
 				fornecedorDao.todosComNome(nome.getText(), cmbxUF.getSelectedItem().toString(), cmbxCidade.getSelectedItem().toString(), tbResultModel);
 			}
+		} else if(e.getSource() == btnExcluirSelecionado){
+			
 		}
 	}
 

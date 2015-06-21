@@ -5,6 +5,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import org.hibernate.Session;
+
 public class Conexao {
 	private EntityManagerFactory factory;
     private EntityManager manager;
@@ -32,7 +34,6 @@ public class Conexao {
     public void criaConexao(){
         factory = Persistence.createEntityManagerFactory("ControleFinanceiroPessoal");
         manager = factory.createEntityManager();
-        manager.clear();
         manager.getTransaction().begin();
     }
     
@@ -54,12 +55,17 @@ public class Conexao {
     
     public void atualizaUm(Object objeto){
     	criaConexao();
-    	objeto = manager.merge(objeto);
+    	final Session session = null;
+    	session.update(objeto);
     	fechaConexao();
     }
     
-    public Object atualizaVarios(Object objeto){
-    	return manager.merge(objeto);
+    @SuppressWarnings("unused")
+    public void atualizaVarios(Object objeto){
+    	criaConexao();    	
+		Object obj = (Object)manager.merge(objeto);
+    	obj = objeto;
+    	fechaConexao();
     }
     
     public Query criaQuery(String query){

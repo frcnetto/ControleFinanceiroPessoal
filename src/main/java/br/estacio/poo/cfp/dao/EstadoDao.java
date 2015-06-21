@@ -42,4 +42,19 @@ Conexao conexao = new Conexao();
     		return -1;
     	}
     }
+    
+    public String carregaId(int id) {
+    	conexao.criaConexao();
+    	String ret;
+    	try{
+	    	Query query = conexao.criaQuery("SELECT nome FROM Estado WHERE id = :id");
+	    	query.setParameter("id", id);
+	    	ret = (String) query.getSingleResult();
+	    	conexao.fechaConexao();
+	    	return ret;
+    	}catch(NoResultException e){
+    		conexao.fechaConexao();
+    		return "";
+    	}
+    }
 }

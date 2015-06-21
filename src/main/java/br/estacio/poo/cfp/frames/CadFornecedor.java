@@ -226,17 +226,24 @@ public class CadFornecedor extends JInternalFrame implements ItemListener, Actio
 		ufModel = manipulaCombo.carregaCombo(cmbxUF, estadoDao.carregaUf());
         cmbxUF.setModel(ufModel);
 		cmbxUF.addItemListener(this);
-		getContentPane().add(cmbxUF);
-		
-		cmbxUF.setSelectedIndex(fornecedor.getUf() - 1);
-		String cidade = cidadeDao.buscaId(fornecedor.getCidade());
-		
-		for(int i = 0; i < cidadeModel.getSize(); i++){
-			if(cidade.equals(cmbxCidade.getItemAt(i))){
-				cmbxCidade.setSelectedIndex(i);
+		String estado = estadoDao.carregaId(fornecedor.getUf());
+		for(int i = 0; i < ufModel.getSize(); i++){
+			if(estado == (cmbxUF.getItemAt(i))){
+				cmbxUF.setSelectedIndex(i);
 				continue;
 			}
 		}
+		getContentPane().add(cmbxUF);
+		
+//		cmbxUF.setSelectedIndex(fornecedor.getUf() - 1);
+//		String cidade = cidadeDao.buscaId(fornecedor.getCidade());
+//		
+//		for(int i = 0; i < cidadeModel.getSize(); i++){
+//			if(cidade.equals(cmbxCidade.getItemAt(i))){
+//				cmbxCidade.setSelectedIndex(i);
+//				continue;
+//			}
+//		}
 		
 		endereco = new JTextField(fornecedor.getEndereco());
 		endereco.setBounds(10, 68, 200, 20);
